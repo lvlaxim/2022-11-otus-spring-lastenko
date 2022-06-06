@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="checkParser" class="service.CsvCheckParser">
+    </bean>
+
+    <bean id="checkDao" class="dao.CsvCheckDao">
+        <constructor-arg name="resource" value="questions.csv"/>
+        <constructor-arg name="parser" ref="checkParser"/>
+    </bean>
+
+    <bean id="checkService" class="service.CheckServiceImpl">
+        <constructor-arg name="checkDao" ref="checkDao"/>
+    </bean>
+
+    <bean id="examiner" class="service.ConsoleExaminer">
+        <constructor-arg name="service" ref="checkService"/>
+    </bean>
+
+
+
+</beans>
