@@ -1,9 +1,11 @@
 package ru.lastenko.spring.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@RequiredArgsConstructor
+@Getter
 public class Answer {
     private final String text;
-    private final boolean isCorrect;
+    private final boolean correct;
 }

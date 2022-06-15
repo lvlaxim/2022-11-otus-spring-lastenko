@@ -1,11 +1,12 @@
 package ru.lastenko.spring.model;
 
-
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Data
+@RequiredArgsConstructor
+@Getter
 public class Check {
     private final Question question;
     private final List<Answer> answers;

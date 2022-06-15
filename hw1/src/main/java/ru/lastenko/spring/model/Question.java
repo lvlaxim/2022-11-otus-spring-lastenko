@@ -1,8 +1,10 @@
 package ru.lastenko.spring.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@RequiredArgsConstructor
+@Getter
 public class Question {
     private final String text;
 }
