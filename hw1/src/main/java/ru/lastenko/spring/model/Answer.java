@@ -1,4 +1,4 @@
-package model;
+package ru.lastenko.spring.model;
 
 import lombok.Data;
 

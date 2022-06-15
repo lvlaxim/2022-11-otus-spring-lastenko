@@ -4,19 +4,19 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="checkParser" class="service.CsvCheckParser">
+    <bean id="checkParser" class="ru.lastenko.spring.service.CsvCheckParser">
     </bean>
 
-    <bean id="checkDao" class="dao.CsvCheckDao">
+    <bean id="checkDao" class="ru.lastenko.spring.dao.CsvCheckDao">
         <constructor-arg name="resource" value="questions.csv"/>
         <constructor-arg name="parser" ref="checkParser"/>
     </bean>
 
-    <bean id="checkService" class="service.CheckServiceImpl">
+    <bean id="checkService" class="ru.lastenko.spring.service.CheckServiceImpl">
         <constructor-arg name="checkDao" ref="checkDao"/>
     </bean>
 
-    <bean id="examiner" class="service.ConsoleExaminer">
+    <bean id="examiner" class="ru.lastenko.spring.service.ConsoleExaminer">
         <constructor-arg name="service" ref="checkService"/>
     </bean>
 

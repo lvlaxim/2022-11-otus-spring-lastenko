@@ -1,9 +1,9 @@
-package dao;
+package ru.lastenko.spring.dao;
 
-import model.Check;
+import ru.lastenko.spring.model.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import service.CheckParser;
+import ru.lastenko.spring.service.CheckParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

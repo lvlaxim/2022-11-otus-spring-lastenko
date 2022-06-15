@@ -1,9 +1,9 @@
-package service;
+package ru.lastenko.spring.service;
 
 import lombok.RequiredArgsConstructor;
-import model.Answer;
-import model.Check;
-import model.Question;
+import ru.lastenko.spring.model.Answer;
+import ru.lastenko.spring.model.Check;
+import ru.lastenko.spring.model.Question;
 
 import java.util.Collection;
 

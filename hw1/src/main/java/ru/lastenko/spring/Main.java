@@ -1,7 +1,7 @@
+package ru.lastenko.spring;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import service.CheckService;
-import service.CheckServiceImpl;
-import service.Examiner;
+import ru.lastenko.spring.service.Examiner;
 
 public class Main {
 

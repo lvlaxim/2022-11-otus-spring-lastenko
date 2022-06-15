@@ -1,7 +1,7 @@
-package service;
+package ru.lastenko.spring.service;
 
-import dao.CheckDao;
-import model.Check;
+import ru.lastenko.spring.dao.CheckDao;
+import ru.lastenko.spring.model.Check;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;

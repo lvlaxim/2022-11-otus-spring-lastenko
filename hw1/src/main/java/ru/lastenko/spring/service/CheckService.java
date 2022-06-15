@@ -1,6 +1,6 @@
-package service;
+package ru.lastenko.spring.service;
 
-import model.Check;
+import ru.lastenko.spring.model.Check;
 
 import java.util.Collection;
 

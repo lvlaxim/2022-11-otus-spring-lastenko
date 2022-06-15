@@ -1,6 +1,6 @@
-package dao;
+package ru.lastenko.spring.dao;
 
-import model.Check;
+import ru.lastenko.spring.model.Check;
 
 import java.util.List;
 
