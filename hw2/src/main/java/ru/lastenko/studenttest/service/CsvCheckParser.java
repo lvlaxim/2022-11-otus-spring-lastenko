@@ -1,5 +1,6 @@
 package ru.lastenko.studenttest.service;
 
+import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.Answer;
 import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.model.Question;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class CsvCheckParser implements CheckParser<String> {
     @Override
     public Check parseCheckFrom(String checkAsString) {

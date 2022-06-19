@@ -1,12 +1,14 @@
 package ru.lastenko.studenttest.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.Answer;
 import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.model.Question;
 
 import java.util.Collection;
 
+@Service
 @RequiredArgsConstructor
 public class ConsoleExaminer implements Examiner {
 

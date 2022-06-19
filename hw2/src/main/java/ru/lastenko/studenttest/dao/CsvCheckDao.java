@@ -1,5 +1,6 @@
 package ru.lastenko.studenttest.dao;
 
+import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+//@Service
 @RequiredArgsConstructor
 public class CsvCheckDao implements CheckDao {
 
