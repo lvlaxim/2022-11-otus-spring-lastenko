@@ -5,7 +5,7 @@ import ru.lastenko.studenttest.dao.CheckDao;
 import ru.lastenko.studenttest.model.Check;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -14,7 +14,7 @@ public class CheckServiceImpl implements CheckService {
     private final CheckDao checkDao;
 
     @Override
-    public Collection<Check> getAll() {
+    public List<Check> getAll() {
         return checkDao.getAll();
     }
 }

@@ -4,4 +4,5 @@ public interface Examiner {
 
     void showAllChecks();
 
+    void makeTest();
 }
