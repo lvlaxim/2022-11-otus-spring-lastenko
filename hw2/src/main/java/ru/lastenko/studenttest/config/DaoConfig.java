@@ -14,11 +14,10 @@ import ru.lastenko.studenttest.service.CheckParser;
 @PropertySource("classpath:application.properties")
 public class DaoConfig {
 
-    @Value("${file}")
-    private String questionsLocation;
-
     @Bean
-    public CheckDao checkDao(ResourceLoader resourceLoader, CheckParser<String> parser) {
+    public CheckDao checkDao(ResourceLoader resourceLoader,
+                             CheckParser<String> parser,
+                             @Value("${file}") String questionsLocation) {
         Resource resource = resourceLoader.getResource(questionsLocation);
         return new CsvCheckDao(resource, parser);
     }

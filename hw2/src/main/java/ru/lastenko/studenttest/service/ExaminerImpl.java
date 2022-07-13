@@ -18,7 +18,7 @@ public class ExaminerImpl implements Examiner {
     private final CheckService checkService;
     private final Assistant assistant;
     @Value("${threshold:2}")
-    int threshold;
+    private final Integer threshold;
 
 
     @Override

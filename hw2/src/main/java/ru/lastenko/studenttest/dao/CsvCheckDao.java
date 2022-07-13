@@ -1,9 +1,8 @@
 package ru.lastenko.studenttest.dao;
 
-import org.springframework.stereotype.Service;
-import ru.lastenko.studenttest.model.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.service.CheckParser;
 
 import java.io.BufferedReader;
@@ -22,8 +21,7 @@ public class CsvCheckDao implements CheckDao {
     @Override
     public List<Check> getAll() {
         List<String> checksAsStrings = getChecksFromResourceAsStrings();
-        List<Check> checks = parser.parseChecksFrom(checksAsStrings);
-        return checks;
+        return parser.parseChecksFrom(checksAsStrings);
     }
 
     private List<String> getChecksFromResourceAsStrings() {
