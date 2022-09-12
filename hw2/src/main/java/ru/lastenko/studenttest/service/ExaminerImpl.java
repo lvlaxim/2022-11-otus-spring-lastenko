@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class ExaminerImpl implements Examiner {
 
     private final CheckService checkService;
-    private final Assistant assistant;
+    private final StudentService studentService;
     @Value("${threshold:2}")
     private final Integer threshold;
 
@@ -24,12 +24,12 @@ public class ExaminerImpl implements Examiner {
     @Override
     public void showAllChecks() {
         List<Check> checks = checkService.getAll();
-        assistant.showChecks(checks);
+        checkService.showChecks(checks);
     }
 
     @Override
     public void makeTest() {
-        Student student = assistant.getStudent();
+        Student student = studentService.getStudent();
         Collection<Check> checks = checkService.getAll();
         checks.forEach(check -> {
             boolean checkPassed = makeCheck(check);
@@ -37,7 +37,7 @@ public class ExaminerImpl implements Examiner {
                 student.addScore();
             }
         });
-        assistant.showStudentResult(student);
+        studentService.showStudentResult(student);
         boolean testPassed = student.getScore() > threshold;
         if (testPassed) {
             showGoodNews();
@@ -47,8 +47,8 @@ public class ExaminerImpl implements Examiner {
     }
 
     private boolean makeCheck(Check check) {
-        assistant.showCheck(check);
-        List<String> studentAnswers = assistant.getStudentAnswers();
+        checkService.showCheck(check);
+        List<String> studentAnswers = studentService.getStudentAnswers();
         return areStudentAnswersRight(studentAnswers, check);
     }
 

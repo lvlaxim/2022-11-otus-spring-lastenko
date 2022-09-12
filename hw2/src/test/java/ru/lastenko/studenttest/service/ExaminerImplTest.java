@@ -28,12 +28,12 @@ class ExaminerImplTest {
     @Mock
     CheckService checkService;
     @Mock
-    Assistant assistant;
+    StudentService studentService;
     List<Check> checks;
 
     @BeforeEach
     void setUp() {
-        examiner = new ExaminerImpl(checkService, assistant, THRESHOLD);
+        examiner = new ExaminerImpl(checkService, studentService, THRESHOLD);
 
         Check check = getCheck();
         checks = List.of(check);
@@ -46,47 +46,47 @@ class ExaminerImplTest {
         examiner.showAllChecks();
 
         verify(checkService, times(1)).getAll();
-        verify(assistant, times(1)).showChecks(checks);
+        verify(checkService, times(1)).showChecks(checks);
     }
 
     @Test
     @DisplayName("провести тест для студента-отличника (отвечает правильно)")
     void shouldMakeTestWithRightStudentAnswer() {
         var student = mock(Student.class);
-        when(assistant.getStudent()).thenReturn(student);
-        when(assistant.getStudentAnswers()).thenReturn(List.of(RIGHT_ANSWER));
+        when(studentService.getStudent()).thenReturn(student);
+        when(studentService.getStudentAnswers()).thenReturn(List.of(RIGHT_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD + 1);
 
         examiner.makeTest();
 
-        verify(assistant, times(1)).getStudent();
+        verify(studentService, times(1)).getStudent();
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
-            verify(assistant, times(1)).showCheck(check);
-            verify(assistant, times(1)).getStudentAnswers();
+            verify(checkService, times(1)).showCheck(check);
+            verify(studentService, times(1)).getStudentAnswers();
         });
         verify(student, atLeastOnce()).addScore();
-        verify(assistant, times(1)).showStudentResult(student);
+        verify(studentService, times(1)).showStudentResult(student);
     }
 
     @Test
     @DisplayName("провести тест для студента-двоичника (отвечает неправильно)")
     void shouldMakeTestWithWrongStudentAnswer() {
         var student = mock(Student.class);
-        when(assistant.getStudent()).thenReturn(student);
-        when(assistant.getStudentAnswers()).thenReturn(List.of(WRONG_ANSWER));
+        when(studentService.getStudent()).thenReturn(student);
+        when(studentService.getStudentAnswers()).thenReturn(List.of(WRONG_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD);
 
         examiner.makeTest();
 
-        verify(assistant, times(1)).getStudent();
+        verify(studentService, times(1)).getStudent();
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
-            verify(assistant, times(1)).showCheck(check);
-            verify(assistant, times(1)).getStudentAnswers();
+            verify(checkService, times(1)).showCheck(check);
+            verify(studentService, times(1)).getStudentAnswers();
         });
         verify(student, never()).addScore();
-        verify(assistant, times(1)).showStudentResult(student);
+        verify(studentService, times(1)).showStudentResult(student);
     }
 
     private Check getCheck() {
