@@ -40,9 +40,9 @@ public class ExaminerImpl implements Examiner {
         assistant.showStudentResult(student);
         boolean testPassed = student.getScore() > threshold;
         if (testPassed) {
-            assistant.showGoodNews();
+            showGoodNews();
         } else {
-            assistant.showBadNews();
+            showBadNews();
         }
     }
 
@@ -59,6 +59,14 @@ public class ExaminerImpl implements Examiner {
         boolean correctAnswersCount = rightAnswers.size() == studentAnswers.size();
         boolean answersRight = studentAnswers.containsAll(rightAnswers);
         return correctAnswersCount && answersRight;
+    }
+
+    private void showGoodNews() {
+        System.out.println("Congratulations! Test passed.");
+    }
+
+    private void showBadNews() {
+        System.out.println("Sorry, you didn't pass the test.");
     }
 
 }

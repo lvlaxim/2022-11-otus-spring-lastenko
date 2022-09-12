@@ -67,7 +67,6 @@ class ExaminerImplTest {
         });
         verify(student, atLeastOnce()).addScore();
         verify(assistant, times(1)).showStudentResult(student);
-        verify(assistant, times(1)).showGoodNews();
     }
 
     @Test
@@ -88,7 +87,6 @@ class ExaminerImplTest {
         });
         verify(student, never()).addScore();
         verify(assistant, times(1)).showStudentResult(student);
-        verify(assistant, times(1)).showBadNews();
     }
 
     private Check getCheck() {

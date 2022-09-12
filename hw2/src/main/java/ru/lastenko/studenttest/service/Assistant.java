@@ -13,10 +13,6 @@ public interface Assistant {
 
     void showStudentResult(Student student);
 
-    void showGoodNews();
-
-    void showBadNews();
-
     Student getStudent();
 
     List<String> getStudentAnswers();

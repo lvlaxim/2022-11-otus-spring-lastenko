@@ -35,16 +35,6 @@ public class ConsoleAssistant implements Assistant {
     }
 
     @Override
-    public void showGoodNews() {
-        System.out.println("Congratulations! Test passed.");
-    }
-
-    @Override
-    public void showBadNews() {
-        System.out.println("Sorry, you didn't pass the test.");
-    }
-
-    @Override
     public Student getStudent() {
         String name;
         String surname;
