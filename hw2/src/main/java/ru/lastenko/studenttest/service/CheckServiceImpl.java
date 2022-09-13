@@ -14,6 +14,7 @@ import java.util.List;
 public class CheckServiceImpl implements CheckService {
 
     private final CheckDao checkDao;
+    private final IOService ioService;
 
     @Override
     public List<Check> getAll() {
@@ -31,20 +32,20 @@ public class CheckServiceImpl implements CheckService {
         if (check.hasAnswerOptions()) {
             showAnswerOptions(check.getOfferedAnswers());
         } else {
-            System.out.println("There are no options");
+            ioService.outputString("There are no options");
         }
-        System.out.println();
+        ioService.outputSeparateLine();
     }
 
     private void showQuestion(Question question) {
-        System.out.println("Question:");
-        System.out.println("\t" + question.getText());
+        ioService.outputString("Question:");
+        ioService.outputString("\t" + question.getText());
     }
 
     private void showAnswerOptions(List<OfferedAnswer> offeredAnswers) {
-        System.out.println("Options:");
+        ioService.outputString("Options:");
         for (OfferedAnswer offeredAnswer : offeredAnswers) {
-            System.out.println("\t" + offeredAnswer.getText());
+            ioService.outputString("\t" + offeredAnswer.getText());
         }
     }
 }

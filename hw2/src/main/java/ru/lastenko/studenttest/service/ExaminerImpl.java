@@ -19,6 +19,7 @@ public class ExaminerImpl implements Examiner {
     private final StudentService studentService;
     @Value("${threshold:2}")
     private final Integer threshold;
+    private final IOService ioService;
 
 
     @Override
@@ -62,11 +63,11 @@ public class ExaminerImpl implements Examiner {
     }
 
     private void showGoodNews() {
-        System.out.println("Congratulations! Test passed.");
+        ioService.outputString("Congratulations! Test passed.");
     }
 
     private void showBadNews() {
-        System.out.println("Sorry, you didn't pass the test.");
+        ioService.outputString("Sorry, you didn't pass the test.");
     }
 
 }

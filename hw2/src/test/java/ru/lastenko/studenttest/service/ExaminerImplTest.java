@@ -29,11 +29,13 @@ class ExaminerImplTest {
     CheckService checkService;
     @Mock
     StudentService studentService;
+    @Mock
+    IOService ioService;
     List<Check> checks;
 
     @BeforeEach
     void setUp() {
-        examiner = new ExaminerImpl(checkService, studentService, THRESHOLD);
+        examiner = new ExaminerImpl(checkService, studentService, THRESHOLD, ioService);
 
         Check check = getCheck();
         checks = List.of(check);
@@ -67,6 +69,7 @@ class ExaminerImplTest {
         });
         verify(student, atLeastOnce()).addScore();
         verify(studentService, times(1)).showStudentResult(student);
+        verify(ioService, times(1)).outputString("Congratulations! Test passed.");
     }
 
     @Test
@@ -87,6 +90,7 @@ class ExaminerImplTest {
         });
         verify(student, never()).addScore();
         verify(studentService, times(1)).showStudentResult(student);
+        verify(ioService, times(1)).outputString("Sorry, you didn't pass the test.");
     }
 
     private Check getCheck() {
