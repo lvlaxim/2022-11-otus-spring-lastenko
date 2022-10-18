@@ -32,19 +32,21 @@ public class ExaminerImpl implements Examiner {
     public void makeTest() {
         Student student = studentService.getStudent();
         Collection<Check> checks = checkService.getAll();
+        if (checks.isEmpty()) {
+            showTestCancellation();
+            return;
+        }
+        interviewStudent(student, checks);
+        showTestResult(student);
+    }
+
+    private void interviewStudent(Student student, Collection<Check> checks) {
         checks.forEach(check -> {
             boolean checkPassed = makeCheck(check);
             if (checkPassed) {
                 student.addScore();
             }
         });
-        studentService.showStudentResult(student);
-        boolean testPassed = student.getScore() > threshold;
-        if (testPassed) {
-            showGoodNews();
-        } else {
-            showBadNews();
-        }
     }
 
     private boolean makeCheck(Check check) {
@@ -62,12 +64,26 @@ public class ExaminerImpl implements Examiner {
         return correctAnswersCount && answersRight;
     }
 
+    private void showTestResult(Student student) {
+        studentService.showStudentResult(student);
+        boolean testPassed = student.getScore() > threshold;
+        if (testPassed) {
+            showGoodNews();
+        } else {
+            showBadNews();
+        }
+    }
+
     private void showGoodNews() {
         ioService.outputString("Congratulations! Test passed.");
     }
 
     private void showBadNews() {
         ioService.outputString("Sorry, you didn't pass the test.");
+    }
+
+    private void showTestCancellation() {
+        ioService.outputString("No checks found. Test canceled!");
     }
 
 }

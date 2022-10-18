@@ -2,6 +2,7 @@ package ru.lastenko.studenttest.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import ru.lastenko.studenttest.exceptions.CheckLoadingException;
 import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.service.CheckParser;
 
@@ -37,7 +38,7 @@ public class CsvCheckDao implements CheckDao {
                 checksAsString.add(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CheckLoadingException("Failed to load checks from csv file", resource);
         }
 
         return checksAsString;
