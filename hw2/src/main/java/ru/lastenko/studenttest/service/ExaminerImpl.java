@@ -18,7 +18,7 @@ public class ExaminerImpl implements Examiner {
     private final CheckService checkService;
     private final StudentService studentService;
     @Value("${threshold:2}")
-    private final Integer threshold;
+    private final int threshold;
     private final IOService ioService;
 
 

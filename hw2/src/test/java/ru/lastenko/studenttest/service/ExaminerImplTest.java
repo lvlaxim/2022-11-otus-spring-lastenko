@@ -19,19 +19,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ExaminerImplTest {
 
-    public static final String QUESTION = "question";
-    public static final String RIGHT_ANSWER = "rightAnswer";
-    public static final String WRONG_ANSWER = "wrongAnswer";
-    public static final int THRESHOLD = 3;
+    private static final String QUESTION = "question";
+    private static final String RIGHT_ANSWER = "rightAnswer";
+    private static final String WRONG_ANSWER = "wrongAnswer";
+    private static final int THRESHOLD = 3;
 
-    Examiner examiner;
+    private Examiner examiner;
     @Mock
-    CheckService checkService;
+    private CheckService checkService;
     @Mock
-    StudentService studentService;
+    private StudentService studentService;
     @Mock
-    IOService ioService;
-    List<Check> checks;
+    private IOService ioService;
+    private List<Check> checks;
 
     @BeforeEach
     void setUp() {
