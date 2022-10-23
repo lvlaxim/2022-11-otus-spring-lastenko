@@ -8,7 +8,5 @@ public interface CheckService {
 
     List<Check> getAll();
 
-    void showChecks(List<Check> checks);
-
     void showCheck(Check check);
 }

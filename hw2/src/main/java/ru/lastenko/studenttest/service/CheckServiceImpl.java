@@ -29,11 +29,6 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public void showChecks(List<Check> checks) {
-        checks.forEach(this::showCheck);
-    }
-
-    @Override
     public void showCheck(Check check) {
         showQuestion(check.getQuestion());
         if (check.hasAnswerOptions()) {

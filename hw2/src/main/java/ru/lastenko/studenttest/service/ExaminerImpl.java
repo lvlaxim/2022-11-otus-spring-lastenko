@@ -21,13 +21,6 @@ public class ExaminerImpl implements Examiner {
     private final int threshold;
     private final IOService ioService;
 
-
-    @Override
-    public void showAllChecks() {
-        List<Check> checks = checkService.getAll();
-        checkService.showChecks(checks);
-    }
-
     @Override
     public void makeTest() {
         Student student = studentService.getStudent();

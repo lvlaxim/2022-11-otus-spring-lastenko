@@ -43,15 +43,6 @@ class ExaminerImplTest {
     }
 
     @Test
-    @DisplayName("показать все проверки")
-    void shouldShowAllChecks() {
-        examiner.showAllChecks();
-
-        verify(checkService, times(1)).getAll();
-        verify(checkService, times(1)).showChecks(checks);
-    }
-
-    @Test
     @DisplayName("провести тест для студента-отличника (отвечает правильно)")
     void shouldMakeTestWithRightStudentAnswer() {
         var student = mock(Student.class);
