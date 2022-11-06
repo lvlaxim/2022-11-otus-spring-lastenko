@@ -1,6 +1,5 @@
 package ru.lastenko.studenttest.dao;
 
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -8,6 +7,7 @@ import org.springframework.core.io.Resource;
 import ru.lastenko.studenttest.service.CheckParser;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -19,9 +19,8 @@ import static org.mockito.Mockito.*;
 class CsvCheckDaoTest {
 
     @Test
-    @SneakyThrows
     @DisplayName("должен получить записи с проверками из ресурсов и распарсить их")
-    void shouldGetAll() {
+    void shouldGetAll() throws IOException {
         String checkAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
         InputStream inputStream = new ByteArrayInputStream(checkAsCsvString.getBytes(StandardCharsets.UTF_8));
         var resource = mock(Resource.class);
