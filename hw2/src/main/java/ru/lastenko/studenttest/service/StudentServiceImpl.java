@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.Student;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
@@ -28,12 +26,4 @@ public class StudentServiceImpl implements StudentService {
         return new Student(name, surname);
     }
 
-    @Override
-    public List<String> getStudentAnswers() {
-        String studentAnswer;
-        studentAnswer = ioService.readStringWithPrompt("Please enter your answers separated by commas");
-        ioService.outputSeparateLine();
-        String[] studentAnswerAsArray = studentAnswer.split("\\s*,\\s*");
-        return List.of(studentAnswerAsArray);
-    }
 }

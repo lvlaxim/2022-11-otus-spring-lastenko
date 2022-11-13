@@ -44,7 +44,7 @@ public class ExaminerImpl implements Examiner {
 
     private boolean makeCheck(Check check) {
         checkService.showCheck(check);
-        List<String> studentAnswers = studentService.getStudentAnswers();
+        List<String> studentAnswers = getStudentAnswers();
         return areStudentAnswersRight(studentAnswers, check);
     }
 
@@ -65,6 +65,10 @@ public class ExaminerImpl implements Examiner {
         } else {
             showBadNews();
         }
+    }
+
+    private List<String> getStudentAnswers() {
+        return ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
     }
 
     private void showGoodNews() {

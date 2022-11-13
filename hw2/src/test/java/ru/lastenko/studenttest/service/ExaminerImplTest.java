@@ -47,7 +47,8 @@ class ExaminerImplTest {
     void shouldMakeTestWithRightStudentAnswer() {
         var student = mock(Student.class);
         when(studentService.getStudent()).thenReturn(student);
-        when(studentService.getStudentAnswers()).thenReturn(List.of(RIGHT_ANSWER));
+        when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
+                .thenReturn(List.of(RIGHT_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD + 1);
 
         examiner.makeTest();
@@ -56,7 +57,8 @@ class ExaminerImplTest {
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
             verify(checkService, times(1)).showCheck(check);
-            verify(studentService, times(1)).getStudentAnswers();
+            verify(ioService, times(1))
+                    .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         });
         verify(student, atLeastOnce()).addScore();
         verify(studentService, times(1)).showStudentResult(student);
@@ -68,7 +70,8 @@ class ExaminerImplTest {
     void shouldMakeTestWithWrongStudentAnswer() {
         var student = mock(Student.class);
         when(studentService.getStudent()).thenReturn(student);
-        when(studentService.getStudentAnswers()).thenReturn(List.of(WRONG_ANSWER));
+        when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
+                .thenReturn(List.of(WRONG_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD);
 
         examiner.makeTest();
@@ -77,7 +80,8 @@ class ExaminerImplTest {
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
             verify(checkService, times(1)).showCheck(check);
-            verify(studentService, times(1)).getStudentAnswers();
+            verify(ioService, times(1))
+                    .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         });
         verify(student, never()).addScore();
         verify(studentService, times(1)).showStudentResult(student);
