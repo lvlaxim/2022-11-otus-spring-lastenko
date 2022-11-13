@@ -17,7 +17,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getStudent() {
+    public Student determineCurrentStudent() {
         String name;
         String surname;
         ioService.outputString("Hi! please introduce yourself");

@@ -15,16 +15,16 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@DisplayName("Экзаменатор должен ")
+@DisplayName("Приложение должено ")
 @ExtendWith(MockitoExtension.class)
-class ExaminerImplTest {
+class AppRunnerImplTest {
 
     private static final String QUESTION = "question";
     private static final String RIGHT_ANSWER = "rightAnswer";
     private static final String WRONG_ANSWER = "wrongAnswer";
     private static final int THRESHOLD = 3;
 
-    private Examiner examiner;
+    private AppRunner appRunner;
     @Mock
     private CheckService checkService;
     @Mock
@@ -35,7 +35,7 @@ class ExaminerImplTest {
 
     @BeforeEach
     void setUp() {
-        examiner = new ExaminerImpl(checkService, studentService, THRESHOLD, ioService);
+        appRunner = new AppRunnerImpl(checkService, studentService, THRESHOLD, ioService);
 
         Check check = getCheck();
         checks = List.of(check);
@@ -46,14 +46,14 @@ class ExaminerImplTest {
     @DisplayName("провести тест для студента-отличника (отвечает правильно)")
     void shouldMakeTestWithRightStudentAnswer() {
         var student = mock(Student.class);
-        when(studentService.getStudent()).thenReturn(student);
+        when(studentService.determineCurrentStudent()).thenReturn(student);
         when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
                 .thenReturn(List.of(RIGHT_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD + 1);
 
-        examiner.makeTest();
+        appRunner.executeExam();
 
-        verify(studentService, times(1)).getStudent();
+        verify(studentService, times(1)).determineCurrentStudent();
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
             verify(checkService, times(1)).showCheck(check);
@@ -69,14 +69,14 @@ class ExaminerImplTest {
     @DisplayName("провести тест для студента-двоичника (отвечает неправильно)")
     void shouldMakeTestWithWrongStudentAnswer() {
         var student = mock(Student.class);
-        when(studentService.getStudent()).thenReturn(student);
+        when(studentService.determineCurrentStudent()).thenReturn(student);
         when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
                 .thenReturn(List.of(WRONG_ANSWER));
         when(student.getScore()).thenReturn(THRESHOLD);
 
-        examiner.makeTest();
+        appRunner.executeExam();
 
-        verify(studentService, times(1)).getStudent();
+        verify(studentService, times(1)).determineCurrentStudent();
         verify(checkService, times(1)).getAll();
         checks.forEach(check -> {
             verify(checkService, times(1)).showCheck(check);

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ExaminerImpl implements Examiner {
+public class AppRunnerImpl implements AppRunner {
 
     private final CheckService checkService;
     private final StudentService studentService;
@@ -22,8 +22,8 @@ public class ExaminerImpl implements Examiner {
     private final IOService ioService;
 
     @Override
-    public void makeTest() {
-        Student student = studentService.getStudent();
+    public void executeExam() {
+        Student student = studentService.determineCurrentStudent();
         Collection<Check> checks = checkService.getAll();
         if (checks.isEmpty()) {
             showTestCancellation();

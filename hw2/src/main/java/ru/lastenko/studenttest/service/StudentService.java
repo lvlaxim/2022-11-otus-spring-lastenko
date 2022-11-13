@@ -6,5 +6,5 @@ public interface StudentService {
 
     void showStudentResult(Student student);
 
-    Student getStudent();
+    Student determineCurrentStudent();
 }
