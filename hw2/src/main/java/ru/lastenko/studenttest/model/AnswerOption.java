@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class OfferedAnswer {
+public class AnswerOption {
     private final String text;
     private final boolean correct;
 }

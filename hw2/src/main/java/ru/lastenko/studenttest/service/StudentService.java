@@ -4,7 +4,5 @@ import ru.lastenko.studenttest.model.Student;
 
 public interface StudentService {
 
-    void showStudentResult(Student student);
-
     Student determineCurrentStudent();
 }

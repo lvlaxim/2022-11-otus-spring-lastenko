@@ -3,8 +3,8 @@ package ru.lastenko.studenttest.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Check;
-import ru.lastenko.studenttest.model.OfferedAnswer;
 import ru.lastenko.studenttest.model.Question;
 
 import java.util.List;
@@ -22,11 +22,11 @@ class CsvCheckParserTest {
         var parser = new CsvCheckParser();
         String checkAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
         var question = new Question("question");
-        List<OfferedAnswer> offeredAnswers = List.of(
-                new OfferedAnswer("rightAnswer", true),
-                new OfferedAnswer("wrongAnswer1", false),
-                new OfferedAnswer("wrongAnswer2", false));
-        Check expectedCheck = new Check(question, offeredAnswers);
+        List<AnswerOption> answerOptions = List.of(
+                new AnswerOption("rightAnswer", true),
+                new AnswerOption("wrongAnswer1", false),
+                new AnswerOption("wrongAnswer2", false));
+        Check expectedCheck = new Check(question, answerOptions);
 
         Check actualCheck = parser.parseCheckFrom(checkAsCsvString);
 

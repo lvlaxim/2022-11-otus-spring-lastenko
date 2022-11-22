@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.dao.CheckDao;
 import ru.lastenko.studenttest.exceptions.CheckLoadingException;
+import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Check;
-import ru.lastenko.studenttest.model.OfferedAnswer;
 import ru.lastenko.studenttest.model.Question;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class CheckServiceImpl implements CheckService {
     public void showCheck(Check check) {
         showQuestion(check.getQuestion());
         if (check.hasAnswerOptions()) {
-            showAnswerOptions(check.getOfferedAnswers());
+            showAnswerOptions(check.getAnswerOptions());
         } else {
             ioService.outputString("There are no options");
         }
@@ -44,10 +44,10 @@ public class CheckServiceImpl implements CheckService {
         ioService.outputString("\t" + question.getText());
     }
 
-    private void showAnswerOptions(List<OfferedAnswer> offeredAnswers) {
+    private void showAnswerOptions(List<AnswerOption> answerOptions) {
         ioService.outputString("Options:");
-        for (OfferedAnswer offeredAnswer : offeredAnswers) {
-            ioService.outputString("\t" + offeredAnswer.getText());
+        for (AnswerOption answerOption : answerOptions) {
+            ioService.outputString("\t" + answerOption.getText());
         }
     }
 }

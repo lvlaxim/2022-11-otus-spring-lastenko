@@ -1,7 +1,7 @@
 package ru.lastenko.studenttest.service;
 
 import org.springframework.stereotype.Service;
-import ru.lastenko.studenttest.model.OfferedAnswer;
+import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.model.Question;
 
@@ -19,11 +19,11 @@ public class CsvCheckParser implements CheckParser<String> {
         List<String> checkAsStringList = Arrays.asList(checkAsStringArray);
         String questionText = checkAsStringList.get(0);
         var question = new Question(questionText);
-        var answers = new ArrayList<OfferedAnswer>();
+        var answers = new ArrayList<AnswerOption>();
         for (int i = 1; i < checkAsStringList.size(); i += 2) {
             String answerText = checkAsStringList.get(i);
             String isAnswerCorrect = checkAsStringList.get(i + 1);
-            answers.add(new OfferedAnswer(answerText, Boolean.parseBoolean(isAnswerCorrect)));
+            answers.add(new AnswerOption(answerText, Boolean.parseBoolean(isAnswerCorrect)));
         }
         return new Check(question, answers);
     }

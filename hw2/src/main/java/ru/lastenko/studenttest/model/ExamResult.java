@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class Student {
-    private final String name;
-    private final String surname;
+public class ExamResult {
+
+    private final Student student;
+    private final int score;
 }

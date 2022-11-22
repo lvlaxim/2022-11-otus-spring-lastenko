@@ -11,12 +11,6 @@ public class StudentServiceImpl implements StudentService {
     private final IOService ioService;
 
     @Override
-    public void showStudentResult(Student student) {
-        var result = String.format("%s, your score is %d", student.getName(), student.getScore());
-        ioService.outputString(result);
-    }
-
-    @Override
     public Student determineCurrentStudent() {
         String name;
         String surname;

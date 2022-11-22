@@ -4,7 +4,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import ru.lastenko.studenttest.service.AppRunner;
 
-//@Configuration - не нужен здесь?
 @ComponentScan
 public class Main {
 
