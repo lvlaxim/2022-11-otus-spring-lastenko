@@ -1,18 +1,20 @@
-package ru.lastenko.studenttest.service;
+package ru.lastenko.studenttest.service.modeloutput;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.ExamResult;
+import ru.lastenko.studenttest.service.IOService;
 
 @Service
 @RequiredArgsConstructor
-public class ExamResultService {
+public class ExamResultOutputService implements ModelOutputService<ExamResult> {
 
     @Value("${threshold:2}")
     private final int threshold;
     private final IOService ioService;
 
+    @Override
     public void show(ExamResult examResult) {
         showScore(examResult);
         showOutcome(examResult.getScore());

@@ -6,6 +6,7 @@ import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.model.ExamResult;
 import ru.lastenko.studenttest.model.Student;
+import ru.lastenko.studenttest.service.modeloutput.ModelOutputService;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class ExamService {
 
     private final CheckService checkService;
+    private final ModelOutputService<Check> checkOutputService;
     private final IOService ioService;
 
     public ExamResult executeExamFor(Student student) {
@@ -39,7 +41,7 @@ public class ExamService {
     }
 
     private boolean makeCheck(Check check) {
-        checkService.showCheck(check);
+        checkOutputService.show(check);
         List<String> studentAnswers = getStudentAnswer();
         return isStudentAnswerRight(studentAnswers, check);
     }

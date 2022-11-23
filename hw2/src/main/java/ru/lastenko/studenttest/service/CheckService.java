@@ -8,5 +8,4 @@ public interface CheckService {
 
     List<Check> getAll();
 
-    void showCheck(Check check);
 }

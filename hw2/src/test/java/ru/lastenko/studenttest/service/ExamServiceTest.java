@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.lastenko.studenttest.model.*;
+import ru.lastenko.studenttest.service.modeloutput.CheckOutputService;
 
 import java.util.List;
 
@@ -27,12 +28,14 @@ class ExamServiceTest {
     @Mock
     private CheckService checkService;
     @Mock
+    private CheckOutputService checkOutputService;
+    @Mock
     private IOService ioService;
     List<Check> checks;
 
     @BeforeEach
     void setUp() {
-        examService = new ExamService(checkService, ioService);
+        examService = new ExamService(checkService, checkOutputService, ioService);
         checks = List.of(getCheck(), getCheck(), getCheck());
         when(checkService.getAll()).thenReturn(checks);
     }
@@ -46,7 +49,7 @@ class ExamServiceTest {
         var actualExamResult = examService.executeExamFor(STUDENT);
 
         verify(checkService, times(1)).getAll();
-        verify(checkService, times(3)).showCheck(any(Check.class));
+        verify(checkOutputService, times(3)).show(any(Check.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         var expectedExamResult = new ExamResult(STUDENT, 3);
@@ -65,7 +68,7 @@ class ExamServiceTest {
         var actualExamResult = examService.executeExamFor(STUDENT);
 
         verify(checkService, times(1)).getAll();
-        verify(checkService, times(3)).showCheck(any(Check.class));
+        verify(checkOutputService, times(3)).show(any(Check.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         var expectedExamResult = new ExamResult(STUDENT, 0);

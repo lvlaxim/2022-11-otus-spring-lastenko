@@ -7,13 +7,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.lastenko.studenttest.model.ExamResult;
 import ru.lastenko.studenttest.model.Student;
+import ru.lastenko.studenttest.service.modeloutput.ExamResultOutputService;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Сервис обрабатывающий результат экзамена")
 @ExtendWith(MockitoExtension.class)
-class ExamResultServiceTest {
+class ExamResultOutputServiceTest {
 
     private static final Student STUDENT = new Student("Ivan", "Ivanov");
 
@@ -23,7 +24,7 @@ class ExamResultServiceTest {
     @Test
     @DisplayName("должен вывести набранные баллы, поздравить со здачей экзамена")
     void shouldCongratulateOnPassingExam() {
-        var examResultService = new ExamResultService(5, ioService);
+        var examResultService = new ExamResultOutputService(5, ioService);
         var examResult = new ExamResult(STUDENT, 6);
 
         examResultService.show(examResult);
@@ -35,7 +36,7 @@ class ExamResultServiceTest {
     @Test
     @DisplayName("должен вывести набранные баллы, огорчить провалом экзамена")
     void shouldRegretExamFailed() {
-        var examResultService = new ExamResultService(5, ioService);
+        var examResultService = new ExamResultOutputService(5, ioService);
         var examResult = new ExamResult(STUDENT, 4);
 
         examResultService.show(examResult);
