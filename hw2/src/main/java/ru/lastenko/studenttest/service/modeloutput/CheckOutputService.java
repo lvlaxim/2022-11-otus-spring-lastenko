@@ -7,8 +7,6 @@ import ru.lastenko.studenttest.model.Check;
 import ru.lastenko.studenttest.model.Question;
 import ru.lastenko.studenttest.service.IOService;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CheckOutputService implements ModelOutputService<Check> {
@@ -22,17 +20,12 @@ public class CheckOutputService implements ModelOutputService<Check> {
         var question = check.getQuestion();
         questionOutputService.show(question);
         if (check.hasAnswerOptions()) {
-            showAnswerOptions(check.getAnswerOptions());
+            ioService.outputString("Options:");
+            var answerOptions = check.getAnswerOptions();
+            answerOptionOutputService.show(answerOptions);
         } else {
             ioService.outputString("There are no options");
         }
         ioService.outputSeparateLine();
-    }
-
-    private void showAnswerOptions(List<AnswerOption> answerOptions) {
-        ioService.outputString("Options:");
-        for (AnswerOption answerOption : answerOptions) {
-            answerOptionOutputService.show(answerOption);
-        }
     }
 }

@@ -32,7 +32,7 @@ public class ExamService {
     private ExamResult interviewStudent(Student student, Collection<Check> checks) {
         int score = 0;
         for (Check check : checks) {
-            boolean checkPassed = makeCheck(check);
+            boolean checkPassed = make(check);
             if (checkPassed) {
                 score++;
             }
@@ -40,7 +40,7 @@ public class ExamService {
         return new ExamResult(student, score);
     }
 
-    private boolean makeCheck(Check check) {
+    private boolean make(Check check) {
         checkOutputService.show(check);
         List<String> studentAnswers = getStudentAnswer();
         return isStudentAnswerRight(studentAnswers, check);
