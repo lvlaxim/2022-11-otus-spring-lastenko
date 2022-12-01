@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.core.io.Resource;
-import ru.lastenko.studenttest.service.CheckParser;
+import ru.lastenko.studenttest.service.QustionParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,24 +16,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("DAO класс для работы с *.csv файлами")
-class CsvCheckDaoTest {
+class CsvQuestionDaoTest {
 
     @Test
     @DisplayName("должен получить записи с проверками из ресурсов и распарсить их")
     void shouldGetAll() throws IOException {
-        String checkAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
-        InputStream inputStream = new ByteArrayInputStream(checkAsCsvString.getBytes(StandardCharsets.UTF_8));
+        String questionAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
+        InputStream inputStream = new ByteArrayInputStream(questionAsCsvString.getBytes(StandardCharsets.UTF_8));
         var resource = mock(Resource.class);
         when(resource.getInputStream()).thenReturn(inputStream);
-        var parser = mock(CheckParser.class);
-        CsvCheckDao csvCheckDao = new CsvCheckDao(resource, parser);
+        var parser = mock(QustionParser.class);
+        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser);
 
-        csvCheckDao.getAll();
+        csvQuestionDao.getAll();
 
         verify(resource, times(1)).getInputStream();
         ArgumentCaptor<List<String>> argumentCaptor = ArgumentCaptor.forClass(List.class);
-        verify(parser, times(1)).parseChecksFrom(argumentCaptor.capture());
-        List<String> checksAsCsvStrings = argumentCaptor.getValue();
-        assertEquals(checkAsCsvString, checksAsCsvStrings.get(0));
+        verify(parser, times(1)).parseQuestionsFrom(argumentCaptor.capture());
+        List<String> questionsAsCsvStrings = argumentCaptor.getValue();
+        assertEquals(questionAsCsvString, questionsAsCsvStrings.get(0));
     }
 }

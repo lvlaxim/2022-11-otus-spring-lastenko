@@ -4,9 +4,9 @@ import org.springframework.core.io.Resource;
 
 import java.util.MissingResourceException;
 
-public class CheckLoadingException extends MissingResourceException {
+public class QuestionLoadingException extends MissingResourceException {
 
-    public CheckLoadingException(String message, Resource resource) {
+    public QuestionLoadingException(String message, Resource resource) {
         super(message, resource.getClass().getName(), resource.getFilename());
     }
 }

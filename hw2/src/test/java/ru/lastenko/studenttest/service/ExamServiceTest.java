@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.lastenko.studenttest.model.*;
-import ru.lastenko.studenttest.service.modeloutput.CheckOutputService;
+import ru.lastenko.studenttest.service.modeloutput.QuestionOutputService;
 
 import java.util.List;
 
@@ -26,18 +26,18 @@ class ExamServiceTest {
 
     private ExamService examService;
     @Mock
-    private CheckService checkService;
+    private QuestionService questionService;
     @Mock
-    private CheckOutputService checkOutputService;
+    private QuestionOutputService questionOutputService;
     @Mock
     private IOService ioService;
-    List<Check> checks;
+    List<Question> questions;
 
     @BeforeEach
     void setUp() {
-        examService = new ExamService(checkService, checkOutputService, ioService);
-        checks = List.of(getCheck(), getCheck(), getCheck());
-        when(checkService.getAll()).thenReturn(checks);
+        examService = new ExamService(questionService, questionOutputService, ioService);
+        questions = List.of(getQuestion(), getQuestion(), getQuestion());
+        when(questionService.getAll()).thenReturn(questions);
     }
 
     @Test
@@ -48,8 +48,8 @@ class ExamServiceTest {
 
         var actualExamResult = examService.executeExamFor(STUDENT);
 
-        verify(checkService, times(1)).getAll();
-        verify(checkOutputService, times(3)).show(any(Check.class));
+        verify(questionService, times(1)).getAll();
+        verify(questionOutputService, times(3)).show(any(Question.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         var expectedExamResult = new ExamResult(STUDENT, 3);
@@ -67,8 +67,8 @@ class ExamServiceTest {
 
         var actualExamResult = examService.executeExamFor(STUDENT);
 
-        verify(checkService, times(1)).getAll();
-        verify(checkOutputService, times(3)).show(any(Check.class));
+        verify(questionService, times(1)).getAll();
+        verify(questionOutputService, times(3)).show(any(Question.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
         var expectedExamResult = new ExamResult(STUDENT, 0);
@@ -78,11 +78,10 @@ class ExamServiceTest {
 
     }
 
-    private Check getCheck() {
-        var question = new Question(QUESTION);
+    private Question getQuestion() {
         List<AnswerOption> answerOptions = List.of(
                 new AnswerOption(RIGHT_ANSWER, true),
                 new AnswerOption(WRONG_ANSWER, false));
-        return new Check(question, answerOptions);
+        return new Question(QUESTION, answerOptions);
     }
 }
