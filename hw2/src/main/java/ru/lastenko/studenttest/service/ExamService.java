@@ -19,46 +19,37 @@ public class ExamService {
 
     public ExamResult executeExamFor(Student student) {
         Collection<Question> questions = questionService.getAll();
-        if (questions.isEmpty()) {
-            showExamCancellation();
-            return null;
-        }
-        return interview(student, questions);
+        return interviewAndGetResult(student, questions);
     }
 
-    private ExamResult interview(Student student, Collection<Question> questions) {
+    private ExamResult interviewAndGetResult(Student student, Collection<Question> questions) {
         int score = 0;
         for (Question question : questions) {
-            boolean isAnswerRight = ask(question);
-            if (isAnswerRight) {
+            boolean answerIsRight = askQuestionThenGetAnswerAndCheckIt(question);
+            if (answerIsRight) {
                 score++;
             }
         }
         return new ExamResult(student, score);
     }
 
-    private boolean ask(Question question) {
+    private boolean askQuestionThenGetAnswerAndCheckIt(Question question) {
         questionOutputService.show(question);
         var answer = getAnswer();
-        return isStudentRight(answer, question);
+        return checkIfAnswerIsFullAndCorrect(answer, question);
     }
 
     private Answer getAnswer() {
-        List<String> answerAsStrings = ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
+        var instruction = "Please enter your answers separated by commas";
+        List<String> answerAsStrings = ioService.readAndSplitStringByCommasWithPrompt(instruction);
         return new Answer(answerAsStrings);
     }
 
-    private boolean isStudentRight(Answer answer, Question question) {
+    private boolean checkIfAnswerIsFullAndCorrect(Answer answer, Question question) {
         List<String> rightOptions = question.getRightAnswerOptions().stream()
                 .map(AnswerOption::getText)
                 .collect(Collectors.toList());
         List<String> answerParts = answer.getParts();
-        var isAnswerCorrect = answerParts.containsAll(rightOptions) && rightOptions.containsAll(answerParts);
-        return isAnswerCorrect;
+        return answerParts.containsAll(rightOptions) && rightOptions.containsAll(answerParts);
     }
-
-    private void showExamCancellation() {
-        ioService.outputString("No questions found. The exam has been canceled!");
-    }
-
 }

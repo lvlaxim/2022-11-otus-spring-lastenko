@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Service
 @RequiredArgsConstructor
 public class CsvQuestionDao implements QuestionDao {
 
@@ -38,7 +37,10 @@ public class CsvQuestionDao implements QuestionDao {
                 questionsAsString.add(line);
             }
         } catch (IOException e) {
-            throw new QuestionLoadingException("Failed to load questions from csv file", resource);
+            throw new QuestionLoadingException("Failed to load questions from csv file.", resource);
+        }
+        if (questionsAsString.isEmpty()) {
+            throw new QuestionLoadingException("File is empty.", resource);
         }
 
         return questionsAsString;
