@@ -2,10 +2,7 @@ package ru.lastenko.studenttest.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.studenttest.model.AnswerOption;
-import ru.lastenko.studenttest.model.Question;
-import ru.lastenko.studenttest.model.ExamResult;
-import ru.lastenko.studenttest.model.Student;
+import ru.lastenko.studenttest.model.*;
 import ru.lastenko.studenttest.service.modeloutput.ModelOutputService;
 
 import java.util.Collection;
@@ -42,21 +39,22 @@ public class ExamService {
 
     private boolean ask(Question question) {
         questionOutputService.show(question);
-        List<String> studentAnswers = getStudentAnswer();
-        return isStudentAnswerRight(studentAnswers, question);
+        var answer = getAnswer();
+        return isStudentRight(answer, question);
     }
 
-    private List<String> getStudentAnswer() {
-        return ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
+    private Answer getAnswer() {
+        List<String> answerAsStrings = ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
+        return new Answer(answerAsStrings);
     }
 
-    private boolean isStudentAnswerRight(List<String> studentOptions, Question question) {
+    private boolean isStudentRight(Answer answer, Question question) {
         List<String> rightOptions = question.getRightAnswerOptions().stream()
                 .map(AnswerOption::getText)
                 .collect(Collectors.toList());
-        boolean correctOptionsCount = rightOptions.size() == studentOptions.size();
-        boolean optionsAreRight = studentOptions.containsAll(rightOptions);
-        return correctOptionsCount && optionsAreRight;
+        List<String> answerParts = answer.getParts();
+        var isAnswerCorrect = answerParts.containsAll(rightOptions) && rightOptions.containsAll(answerParts);
+        return isAnswerCorrect;
     }
 
     private void showExamCancellation() {
