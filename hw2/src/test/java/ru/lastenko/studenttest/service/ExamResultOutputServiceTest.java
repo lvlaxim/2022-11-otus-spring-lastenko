@@ -24,10 +24,10 @@ class ExamResultOutputServiceTest {
     @Test
     @DisplayName("должен вывести набранные баллы, поздравить со здачей экзамена")
     void shouldCongratulateOnPassingExam() {
-        var examResultService = new ExamResultOutputService(5, ioService);
-        var examResult = new ExamResult(STUDENT, 6);
+        var examResultOutputService = new ExamResultOutputService(ioService);
+        var examResult = new ExamResult(STUDENT, 6, true);
 
-        examResultService.show(examResult);
+        examResultOutputService.show(examResult);
 
         verify(ioService, times(1)).outputString("Ivan, your score is 6");
         verify(ioService, times(1)).outputString("Congratulations! The exam is passed.");
@@ -36,10 +36,10 @@ class ExamResultOutputServiceTest {
     @Test
     @DisplayName("должен вывести набранные баллы, огорчить провалом экзамена")
     void shouldRegretExamFailed() {
-        var examResultService = new ExamResultOutputService(5, ioService);
-        var examResult = new ExamResult(STUDENT, 4);
+        var examResultOutputService = new ExamResultOutputService(ioService);
+        var examResult = new ExamResult(STUDENT, 4, false);
 
-        examResultService.show(examResult);
+        examResultOutputService.show(examResult);
 
         verify(ioService, times(1)).outputString("Ivan, your score is 4");
         verify(ioService, times(1)).outputString("Sorry, you didn't pass the exam.");

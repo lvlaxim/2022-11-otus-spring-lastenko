@@ -9,4 +9,5 @@ public class ExamResult {
 
     private final Student student;
     private final int score;
+    private final boolean passed;
 }

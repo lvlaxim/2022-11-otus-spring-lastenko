@@ -4,14 +4,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.lastenko.studenttest.model.*;
+import ru.lastenko.studenttest.model.AnswerOption;
+import ru.lastenko.studenttest.model.Question;
+import ru.lastenko.studenttest.model.Student;
 import ru.lastenko.studenttest.service.modeloutput.QuestionOutputService;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис проведения экзамена")
@@ -30,12 +33,14 @@ class ExamServiceTest {
     @Mock
     private QuestionOutputService questionOutputService;
     @Mock
+    private ExamResultService examResultService;
+    @Mock
     private IOService ioService;
     List<Question> questions;
 
     @BeforeEach
     void setUp() {
-        examService = new ExamService(questionService, questionOutputService, ioService);
+        examService = new ExamService(questionService, questionOutputService, examResultService, ioService);
         questions = List.of(getQuestion(), getQuestion(), getQuestion());
         when(questionService.getAll()).thenReturn(questions);
     }
@@ -46,17 +51,16 @@ class ExamServiceTest {
         when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
                 .thenReturn(List.of(RIGHT_ANSWER));
 
-        var actualExamResult = examService.executeExamFor(STUDENT);
+        examService.executeExamFor(STUDENT);
 
         verify(questionService, times(1)).getAll();
         verify(questionOutputService, times(3)).show(any(Question.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
-        var expectedExamResult = new ExamResult(STUDENT, 3);
-        assertThat(actualExamResult)
-                .usingRecursiveComparison()
-                .isEqualTo(expectedExamResult);
-
+        var scoreCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(examResultService, times(1)).summarizeResult(eq(STUDENT), scoreCaptor.capture());
+        Integer actualScore = scoreCaptor.getValue();
+        assertEquals(3, actualScore);
     }
 
     @Test
@@ -65,16 +69,16 @@ class ExamServiceTest {
         when(ioService.readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas"))
                 .thenReturn(List.of(WRONG_ANSWER));
 
-        var actualExamResult = examService.executeExamFor(STUDENT);
+        examService.executeExamFor(STUDENT);
 
         verify(questionService, times(1)).getAll();
         verify(questionOutputService, times(3)).show(any(Question.class));
         verify(ioService, times(3))
                 .readAndSplitStringByCommasWithPrompt("Please enter your answers separated by commas");
-        var expectedExamResult = new ExamResult(STUDENT, 0);
-        assertThat(actualExamResult)
-                .usingRecursiveComparison()
-                .isEqualTo(expectedExamResult);
+        var scoreCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(examResultService, times(1)).summarizeResult(eq(STUDENT), scoreCaptor.capture());
+        Integer actualScore = scoreCaptor.getValue();
+        assertEquals(0, actualScore);
 
     }
 

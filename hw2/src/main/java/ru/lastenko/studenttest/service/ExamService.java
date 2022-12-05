@@ -15,6 +15,7 @@ public class ExamService {
 
     private final QuestionService questionService;
     private final ModelOutputService<Question> questionOutputService;
+    private final ExamResultService examResultService;
     private final IOService ioService;
 
     public ExamResult executeExamFor(Student student) {
@@ -30,7 +31,7 @@ public class ExamService {
                 score++;
             }
         }
-        return new ExamResult(student, score);
+        return examResultService.summarizeResult(student, score);
     }
 
     private boolean askQuestionThenGetAnswerAndCheckIt(Question question) {

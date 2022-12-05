@@ -1,7 +1,6 @@
 package ru.lastenko.studenttest.service.modeloutput;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.ExamResult;
 import ru.lastenko.studenttest.service.IOService;
@@ -10,14 +9,12 @@ import ru.lastenko.studenttest.service.IOService;
 @RequiredArgsConstructor
 public class ExamResultOutputService implements ModelOutputService<ExamResult> {
 
-    @Value("${threshold:2}")
-    private final int threshold;
     private final IOService ioService;
 
     @Override
     public void show(ExamResult examResult) {
         showScore(examResult);
-        showOutcome(examResult.getScore());
+        showOutcome(examResult);
     }
 
 
@@ -27,9 +24,8 @@ public class ExamResultOutputService implements ModelOutputService<ExamResult> {
         ioService.outputString(result);
     }
 
-    private void showOutcome(int score) {
-        boolean testPassed = score > threshold;
-        if (testPassed) {
+    private void showOutcome(ExamResult examResult) {
+        if (examResult.isPassed()) {
             ioService.outputString("Congratulations! The exam is passed.");
         } else {
             ioService.outputString("Sorry, you didn't pass the exam.");
