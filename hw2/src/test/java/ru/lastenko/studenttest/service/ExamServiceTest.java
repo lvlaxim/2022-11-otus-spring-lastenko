@@ -36,7 +36,7 @@ class ExamServiceTest {
     private ExamResultService examResultService;
     @Mock
     private IOService ioService;
-    List<Question> questions;
+    private List<Question> questions;
 
     @BeforeEach
     void setUp() {
