@@ -8,16 +8,22 @@ import ru.lastenko.studenttest.model.Student;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final IOService ioService;
+    private final CommunicationService communicationService;
 
     @Override
     public Student determineCurrentStudent() {
-        String name;
-        String surname;
-        ioService.outputString("Hi! please introduce yourself");
-        name = ioService.readStringWithPrompt("your name?");
-        surname = ioService.readStringWithPrompt("your surname?");
+        askToIntroduce();
+        String name = getPersonalDataWithPrompt("prompt.name");
+        String surname = getPersonalDataWithPrompt("prompt.surname");
         return new Student(name, surname);
+    }
+
+    private void askToIntroduce() {
+        communicationService.showMessageByCode("prompt.introduce");
+    }
+
+    private String getPersonalDataWithPrompt(String messageCode) {
+        return communicationService.showMessageByCodeAndGetFeedback(messageCode);
     }
 
 }

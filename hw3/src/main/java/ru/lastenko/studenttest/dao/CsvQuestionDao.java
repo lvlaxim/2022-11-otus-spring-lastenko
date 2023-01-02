@@ -12,11 +12,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 public class CsvQuestionDao implements QuestionDao {
 
     private final Resource resource;
     private final QustionParser<String> parser;
+    private final String locale;
 
     @Override
     public List<Question> getAll() {
@@ -25,24 +28,26 @@ public class CsvQuestionDao implements QuestionDao {
     }
 
     private List<String> getQuestionsFromResourceAsStrings() {
-
-        var questionsAsString = new ArrayList<String>();
+        var localeWithSemicolon = locale + ";";
+        var questionsAsStrings = new ArrayList<String>();
         try (var in = resource.getInputStream();
              var reader = new BufferedReader(new InputStreamReader(in))) {
             while (true) {
                 String line = reader.readLine();
-                if (line == null) {
+                if (isNull(line)) {
                     break;
                 }
-                questionsAsString.add(line);
+                if (line.startsWith(localeWithSemicolon)) {
+                    String questionAsString = line.replaceFirst(localeWithSemicolon, "");
+                    questionsAsStrings.add(questionAsString);
+                }
             }
         } catch (IOException e) {
             throw new QuestionLoadingException("Failed to load questions from csv file.", resource);
         }
-        if (questionsAsString.isEmpty()) {
+        if (questionsAsStrings.isEmpty()) {
             throw new QuestionLoadingException("File is empty.", resource);
         }
-
-        return questionsAsString;
+        return questionsAsStrings;
     }
 }

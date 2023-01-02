@@ -9,6 +9,8 @@ import ru.lastenko.studenttest.dao.CsvQuestionDao;
 import ru.lastenko.studenttest.dao.QuestionDao;
 import ru.lastenko.studenttest.service.QustionParser;
 
+import java.util.Locale;
+
 @Configuration
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class DaoConfig {
@@ -19,6 +21,7 @@ public class DaoConfig {
                                    ApplicationProperties applicationProperties) {
         String fileName = applicationProperties.getFile();
         Resource resource = resourceLoader.getResource(fileName);
-        return new CsvQuestionDao(resource, parser);
+        Locale locale = applicationProperties.getLocale();
+        return new CsvQuestionDao(resource, parser, locale.toString());
     }
 }

@@ -3,13 +3,13 @@ package ru.lastenko.studenttest.service.modeloutput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.ExamResult;
-import ru.lastenko.studenttest.service.IOService;
+import ru.lastenko.studenttest.service.CommunicationService;
 
 @Service
 @RequiredArgsConstructor
 public class ExamResultOutputService implements ModelOutputService<ExamResult> {
 
-    private final IOService ioService;
+    private final CommunicationService communicationService;
 
     @Override
     public void show(ExamResult examResult) {
@@ -17,18 +17,18 @@ public class ExamResultOutputService implements ModelOutputService<ExamResult> {
         showOutcome(examResult);
     }
 
-
     private void showScore(ExamResult examResult) {
         var student = examResult.getStudent();
-        var result = String.format("%s, your score is %d", student.getName(), examResult.getScore());
-        ioService.outputString(result);
+        String name = student.getName();
+        int score = examResult.getScore();
+        communicationService.showMessageByCode("show.score", name, score);
     }
 
     private void showOutcome(ExamResult examResult) {
         if (examResult.isPassed()) {
-            ioService.outputString("Congratulations! The exam is passed.");
+            communicationService.showMessageByCode("congratulation");
         } else {
-            ioService.outputString("Sorry, you didn't pass the exam.");
+            communicationService.showMessageByCode("regret");
         }
     }
 

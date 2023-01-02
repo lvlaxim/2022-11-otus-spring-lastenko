@@ -4,26 +4,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Question;
-import ru.lastenko.studenttest.service.IOService;
+import ru.lastenko.studenttest.service.CommunicationService;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionOutputService implements ModelOutputService<Question> {
 
     private final ModelOutputService<AnswerOption> answerOptionOutputService;
-    private final IOService ioService;
+    private final CommunicationService communicationService;
 
     @Override
     public void show(Question question) {
-        ioService.outputString("Question:");
-        ioService.outputString("\t" + question.getText());
+        communicationService.showMessageByCode("question");
+        communicationService.showMessage("\t" + question.getText());
         if (question.hasAnswerOptions()) {
-            ioService.outputString("Options:");
+            communicationService.showMessageByCode("options");
             var answerOptions = question.getAnswerOptions();
             answerOptionOutputService.show(answerOptions);
         } else {
-            ioService.outputString("There are no options");
+            communicationService.showMessageByCode("no.options");
         }
-        ioService.outputSeparateLine();
+        communicationService.showSeparateLine();
     }
 }

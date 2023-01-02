@@ -16,16 +16,16 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     private final ExamService examService;
     private final StudentService studentService;
     private final ModelOutputService<ExamResult> examResultOutputService;
-    private final IOService ioService;
+    private final CommunicationService communicationService;
 
     @Override
     public void run(ApplicationArguments args) {
         try {
             Student student = studentService.determineCurrentStudent();
-            var examResult = examService.executeExamFor(student);
+            ExamResult examResult = examService.executeExamFor(student);
             examResultOutputService.show(examResult);
         } catch (QuestionLoadingException e) {
-            ioService.outputString("Failed to load questions. The exam has been canceled!");
+            communicationService.showMessageByCode("failed.load.questions");
         }
     }
 }

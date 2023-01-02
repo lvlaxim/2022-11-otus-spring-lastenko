@@ -16,7 +16,7 @@ public class ExamService {
     private final QuestionService questionService;
     private final ModelOutputService<Question> questionOutputService;
     private final ExamResultService examResultService;
-    private final IOService ioService;
+    private final CommunicationService communicationService;
 
     public ExamResult executeExamFor(Student student) {
         Collection<Question> questions = questionService.getAll();
@@ -41,8 +41,7 @@ public class ExamService {
     }
 
     private Answer getAnswer() {
-        var instruction = "Please enter your answers separated by commas";
-        List<String> answerAsStrings = ioService.readAndSplitStringByCommasWithPrompt(instruction);
+        List<String> answerAsStrings = communicationService.showMessageByCodeAndGetFeedbackAsList("prompt.answer");
         return new Answer(answerAsStrings);
     }
 
