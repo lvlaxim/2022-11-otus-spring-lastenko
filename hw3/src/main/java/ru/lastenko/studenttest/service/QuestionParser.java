@@ -5,7 +5,7 @@ import ru.lastenko.studenttest.model.Question;
 import java.util.Collection;
 import java.util.List;
 
-public interface QustionParser<T> {
+public interface QuestionParser<T> {
 
     Question parseQuestionFrom(T  rawQuestion);
 

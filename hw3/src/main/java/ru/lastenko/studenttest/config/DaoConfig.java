@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import ru.lastenko.studenttest.dao.CsvQuestionDao;
 import ru.lastenko.studenttest.dao.QuestionDao;
-import ru.lastenko.studenttest.service.QustionParser;
+import ru.lastenko.studenttest.service.QuestionParser;
 
 import java.util.Locale;
 
@@ -17,7 +17,7 @@ public class DaoConfig {
 
     @Bean
     public QuestionDao questionDao(ResourceLoader resourceLoader,
-                                   QustionParser<String> parser,
+                                   QuestionParser<String> parser,
                                    ApplicationProperties applicationProperties) {
         String fileName = applicationProperties.getFile();
         Resource resource = resourceLoader.getResource(fileName);

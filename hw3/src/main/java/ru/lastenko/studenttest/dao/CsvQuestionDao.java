@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import ru.lastenko.studenttest.exceptions.QuestionLoadingException;
 import ru.lastenko.studenttest.model.Question;
-import ru.lastenko.studenttest.service.QustionParser;
+import ru.lastenko.studenttest.service.QuestionParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import static java.util.Objects.isNull;
 public class CsvQuestionDao implements QuestionDao {
 
     private final Resource resource;
-    private final QustionParser<String> parser;
+    private final QuestionParser<String> parser;
     private final String locale;
 
     @Override

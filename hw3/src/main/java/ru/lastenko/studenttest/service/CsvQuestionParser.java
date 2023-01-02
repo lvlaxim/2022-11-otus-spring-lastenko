@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CsvQuestionParser implements QustionParser<String> {
+public class CsvQuestionParser implements QuestionParser<String> {
     @Override
     public Question parseQuestionFrom(String questionAsString) {
         String[] questionAsStringArray = questionAsString.split(";");
