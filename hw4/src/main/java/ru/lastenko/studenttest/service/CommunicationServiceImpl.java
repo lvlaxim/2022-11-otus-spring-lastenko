@@ -5,8 +5,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.lastenko.studenttest.config.ApplicationProperties;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 @Service
@@ -43,9 +43,9 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    public List<String> showMessageByCodeAndGetFeedbackAsList(String messageCode, Object... args) {
+    public Set<String> showMessageByCodeAndGetFeedbackAsList(String messageCode, Object... args) {
         String feedback = showMessageByCodeAndGetFeedback(messageCode, args);
         String[] feedbackAsArray = feedback.split("\\s*,\\s*");
-        return List.of(feedbackAsArray);
+        return Set.of(feedbackAsArray);
     }
 }

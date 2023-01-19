@@ -6,7 +6,7 @@ import ru.lastenko.studenttest.model.*;
 import ru.lastenko.studenttest.service.modeloutput.ModelOutputService;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,15 +41,15 @@ public class ExamService {
     }
 
     private Answer getAnswer() {
-        List<String> answerAsStrings = communicationService.showMessageByCodeAndGetFeedbackAsList("prompt.answer");
+        Set<String> answerAsStrings = communicationService.showMessageByCodeAndGetFeedbackAsList("prompt.answer");
         return new Answer(answerAsStrings);
     }
 
     private boolean checkIfAnswerIsFullAndCorrect(Answer answer, Question question) {
-        List<String> rightOptions = question.getRightAnswerOptions().stream()
+        Set<String> rightOptions = question.getRightAnswerOptions().stream()
                 .map(AnswerOption::getText)
-                .collect(Collectors.toList());
-        List<String> answerParts = answer.getParts();
+                .collect(Collectors.toSet());
+        Set<String> answerParts = answer.getParts();
         return answerParts.containsAll(rightOptions) && rightOptions.containsAll(answerParts);
     }
 }

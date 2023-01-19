@@ -1,6 +1,6 @@
 package ru.lastenko.studenttest.service;
 
-import java.util.List;
+import java.util.Set;
 
 public interface CommunicationService {
 
@@ -12,5 +12,5 @@ public interface CommunicationService {
 
     String showMessageByCodeAndGetFeedback(String messageCode, Object... args);
 
-    List<String> showMessageByCodeAndGetFeedbackAsList(String messageCode, Object... args);
+    Set<String> showMessageByCodeAndGetFeedbackAsList(String messageCode, Object... args);
 }

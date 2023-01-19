@@ -13,6 +13,7 @@ import ru.lastenko.studenttest.model.Student;
 import ru.lastenko.studenttest.service.modeloutput.QuestionOutputService;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -47,7 +48,7 @@ class ExamServiceTest {
     @DisplayName("должен провести эказамен для студента-отличника (отвечает правильно)")
     void shouldExecuteExamForGoodStudent() {
         when(communicationService.showMessageByCodeAndGetFeedbackAsList("prompt.answer"))
-                .thenReturn(List.of(RIGHT_ANSWER));
+                .thenReturn(Set.of(RIGHT_ANSWER));
 
         examService.executeExamFor(STUDENT);
 
@@ -65,7 +66,7 @@ class ExamServiceTest {
     @DisplayName("должен провести эказамен для студента-двоичника (отвечает неправильно)")
     void shouldExecuteExamForBadStudent() {
         when(communicationService.showMessageByCodeAndGetFeedbackAsList("prompt.answer"))
-                .thenReturn(List.of(WRONG_ANSWER));
+                .thenReturn(Set.of(WRONG_ANSWER));
 
         examService.executeExamFor(STUDENT);
 
