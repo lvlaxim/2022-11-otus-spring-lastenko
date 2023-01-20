@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   messages:
     basename: "i18n/appmessages"
     encoding: "UTF-8"
