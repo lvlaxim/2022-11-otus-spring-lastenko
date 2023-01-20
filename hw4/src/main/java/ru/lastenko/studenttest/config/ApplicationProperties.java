@@ -11,7 +11,7 @@ import java.util.Locale;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ApplicationProperties {
+public class ApplicationProperties implements LocaleProvider {
 
     private String file;
     private int threshold = 3;
