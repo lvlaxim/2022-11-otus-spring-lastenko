@@ -4,7 +4,7 @@ spring:
   messages:
     basename: "i18n/appmessages"
     encoding: "UTF-8"
-
+    fallbackToSystemLocale: false
 application:
   file: "questions.csv"
   threshold: 2

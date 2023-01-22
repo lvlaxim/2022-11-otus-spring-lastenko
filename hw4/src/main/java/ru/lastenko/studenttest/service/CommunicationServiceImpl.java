@@ -3,7 +3,7 @@ package ru.lastenko.studenttest.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.lastenko.studenttest.config.LocaleProvider;
+import ru.lastenko.studenttest.i18n.LocaleHolder;
 
 import java.util.Locale;
 import java.util.Set;
@@ -14,12 +14,12 @@ import java.util.Set;
 public class CommunicationServiceImpl implements CommunicationService {
 
     private final MessageSource messageSource;
-    private final LocaleProvider localeProvider;
+    private final LocaleHolder localeHolder;
     private final IOService ioService;
 
     @Override
     public void showMessageByCode(String messageCode, Object... args) {
-        Locale locale = localeProvider.getLocale();
+        Locale locale = localeHolder.getLocale();
         String message = messageSource.getMessage(messageCode, args, locale);
         ioService.outputString(message);
     }

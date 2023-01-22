@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.core.io.Resource;
 import ru.lastenko.studenttest.exceptions.QuestionLoadingException;
+import ru.lastenko.studenttest.i18n.LocaleHolder;
 import ru.lastenko.studenttest.service.QuestionParser;
 
 import java.io.ByteArrayInputStream;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +30,10 @@ class CsvQuestionDaoTest {
         var resource = mock(Resource.class);
         when(resource.getInputStream()).thenReturn(inputStream);
         var parser = mock(QuestionParser.class);
-        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, "en");
+        var localeProvider = mock(LocaleHolder.class);
+        Locale locale = new Locale("en");
+        when(localeProvider.getLocale()).thenReturn(locale);
+        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, localeProvider);
 
         csvQuestionDao.getAll();
 
@@ -36,7 +41,7 @@ class CsvQuestionDaoTest {
         ArgumentCaptor<List<String>> argumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(parser, times(1)).parseQuestionsFrom(argumentCaptor.capture());
         List<String> questionsAsCsvStrings = argumentCaptor.getValue();
-        String questionAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
+        String questionAsCsvString = "en;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
         assertEquals(questionAsCsvString, questionsAsCsvStrings.get(0));
     }
 
@@ -47,7 +52,8 @@ class CsvQuestionDaoTest {
         var inputStream = mock(InputStream.class);
         when(resource.getInputStream()).thenReturn(inputStream);
         var parser = mock(QuestionParser.class);
-        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, "en");
+        var localeProvider = mock(LocaleHolder.class);
+        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, localeProvider);
 
         var exception = assertThrows(QuestionLoadingException.class, csvQuestionDao::getAll);
 
@@ -64,11 +70,12 @@ class CsvQuestionDaoTest {
         var resource = mock(Resource.class);
         when(resource.getInputStream()).thenReturn(inputStream);
         var parser = mock(QuestionParser.class);
-        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, "en");
+        var localeProvider = mock(LocaleHolder.class);
+        CsvQuestionDao csvQuestionDao = new CsvQuestionDao(resource, parser, localeProvider);
 
         var exception = assertThrows(QuestionLoadingException.class, csvQuestionDao::getAll);
 
-        String expectedMessage = "File is empty.";
+        String expectedMessage = "The file is empty.";
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);
     }

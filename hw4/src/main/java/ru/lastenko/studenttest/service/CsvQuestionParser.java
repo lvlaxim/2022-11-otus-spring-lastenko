@@ -16,9 +16,9 @@ public class CsvQuestionParser implements QuestionParser<String> {
     public Question parseQuestionFrom(String questionAsString) {
         String[] questionAsStringArray = questionAsString.split(";");
         List<String> questionAsStringList = Arrays.asList(questionAsStringArray);
-        String questionText = questionAsStringList.get(0);
+        String questionText = questionAsStringList.get(1);
         var answers = new ArrayList<AnswerOption>();
-        for (int i = 1; i < questionAsStringList.size(); i += 2) {
+        for (int i = 2; i < questionAsStringList.size(); i += 2) {
             String answerText = questionAsStringList.get(i);
             String isAnswerCorrect = questionAsStringList.get(i + 1);
             answers.add(new AnswerOption(answerText, Boolean.parseBoolean(isAnswerCorrect)));

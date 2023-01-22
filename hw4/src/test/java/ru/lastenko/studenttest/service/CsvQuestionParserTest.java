@@ -19,7 +19,7 @@ class CsvQuestionParserTest {
     @DisplayName("должен распарсить объект класса Question из строки")
     void parseStringToQuestion() {
         var parser = new CsvQuestionParser();
-        String questionAsCsvString = "question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
+        String questionAsCsvString = "locale;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
         List<AnswerOption> answerOptions = List.of(
                 new AnswerOption("rightAnswer", true),
                 new AnswerOption("wrongAnswer1", false),

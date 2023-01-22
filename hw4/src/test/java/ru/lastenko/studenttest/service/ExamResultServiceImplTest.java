@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Сервис для работы с результатом тестирования")
 class ExamResultServiceImplTest {
 
-    private static final ApplicationProperties APPLICATION_PROPERTIES = new ApplicationProperties().setThreshold(3);
+    private static final ApplicationProperties APPLICATION_PROPERTIES = new ApplicationProperties();
     private static final Student STUDENT = new Student("Ivan", "Ivanov");
 
     @Test
