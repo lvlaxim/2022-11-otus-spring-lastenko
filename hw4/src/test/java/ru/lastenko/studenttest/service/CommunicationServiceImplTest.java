@@ -4,10 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.lastenko.studenttest.config.ApplicationProperties;
+import ru.lastenko.studenttest.dao.QuestionDao;
+import ru.lastenko.studenttest.i18n.LocaleToggle;
 
 import java.util.Set;
 
@@ -15,15 +19,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис для общения с пользователем")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class CommunicationServiceImplTest {
 
-    @Mock
+    @MockBean
     private MessageSource messageSource;
-    @Mock
+    @MockBean
     private ApplicationProperties applicationProperties;
-    @Mock
+    @MockBean
     private IOService ioService;
+    @MockBean
+    private QuestionDao questionDao;
+    @MockBean
+    private LocaleToggle localeToggle;
+    @Autowired
+    private CommunicationServiceImpl communicationService;
 
     @DisplayName("должен показать сообщение и вернуть обратную связь от пользователя в виде списка, " +
             "разделив его сообщение по запятым")
@@ -31,7 +42,6 @@ class CommunicationServiceImplTest {
     @ValueSource(strings = {"sting1,string2", "sting1 , string2", "sting1   ,   string2"})
     void showMessageByCodeAndGetFeedbackAsList(String string) {
         when(ioService.readString()).thenReturn(string);
-        var communicationService = new CommunicationServiceImpl(messageSource, applicationProperties, ioService);
         var messageCode = "message.code";
 
         Set<String> actualStringList = communicationService.showMessageByCodeAndGetFeedbackAsList(messageCode);

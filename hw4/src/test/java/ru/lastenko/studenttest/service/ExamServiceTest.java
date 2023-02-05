@@ -5,8 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.lastenko.studenttest.i18n.LocaleToggle;
 import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Question;
 import ru.lastenko.studenttest.model.Student;
@@ -19,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис проведения экзамена")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class ExamServiceTest {
 
     private static final Student STUDENT = new Student("Ivan", "Ivanov");
@@ -27,19 +31,21 @@ class ExamServiceTest {
     private static final String RIGHT_ANSWER = "rightAnswer";
     private static final String WRONG_ANSWER = "wrongAnswer";
 
+    @Autowired
     private ExamService examService;
-    @Mock
+    @MockBean
     private QuestionService questionService;
-    @Mock
+    @MockBean
     private QuestionOutputService questionOutputService;
-    @Mock
+    @MockBean
     private ExamResultService examResultService;
-    @Mock
+    @MockBean
     private CommunicationService communicationService;
+    @MockBean
+    private LocaleToggle localeToggle;
 
     @BeforeEach
     void setUp() {
-        examService = new ExamService(questionService, questionOutputService, examResultService, communicationService);
         List<Question> questions = List.of(getQuestion(), getQuestion(), getQuestion());
         when(questionService.getAll()).thenReturn(questions);
     }

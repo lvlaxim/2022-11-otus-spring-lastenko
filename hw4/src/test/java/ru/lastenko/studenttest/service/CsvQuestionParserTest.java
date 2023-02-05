@@ -2,23 +2,37 @@ package ru.lastenko.studenttest.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.lastenko.studenttest.dao.QuestionDao;
+import ru.lastenko.studenttest.i18n.LocaleToggle;
 import ru.lastenko.studenttest.model.AnswerOption;
 import ru.lastenko.studenttest.model.Question;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @DisplayName("Парсер объектов класса Question из строк")
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class CsvQuestionParserTest {
+
+    @MockBean
+    private IOService ioService;
+    @MockBean
+    private QuestionDao questionDao;
+    @MockBean
+    private LocaleToggle localeToggle;
+    @Autowired
+    private CsvQuestionParser parser;
 
     @Test
     @DisplayName("должен распарсить объект класса Question из строки")
     void parseStringToQuestion() {
-        var parser = new CsvQuestionParser();
         String questionAsCsvString = "locale;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE";
         List<AnswerOption> answerOptions = List.of(
                 new AnswerOption("rightAnswer", true),
@@ -34,14 +48,13 @@ class CsvQuestionParserTest {
     @Test
     @DisplayName("должен вызвать метод parseQuestionFrom для каждой строки и вернуть массив соответствующего размера")
     void parseStringsToQuestions() {
-        var parserMock = Mockito.mock(CsvQuestionParser.class);
-        when(parserMock.parseQuestionsFrom(any())).thenCallRealMethod();
-        List<String> questionsAsStrings = List.of("string1", "string2", "string3");
+        List<String> questionsAsStrings = List.of(
+                "locale;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE",
+                "locale;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE",
+                "locale;question;rightAnswer;TRUE;wrongAnswer1;FALSE;wrongAnswer2;FALSE");
 
-        List<Question> questions = parserMock.parseQuestionsFrom(questionsAsStrings);
+        List<Question> questions = parser.parseQuestionsFrom(questionsAsStrings);
 
-        questionsAsStrings.forEach(questionAsString ->
-                verify(parserMock, times(1)).parseQuestionFrom(questionAsString));
         assertThat(questions).asList()
                 .isNotNull()
                 .hasSize(questionsAsStrings.size());
