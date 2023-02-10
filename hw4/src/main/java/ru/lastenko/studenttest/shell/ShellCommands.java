@@ -1,4 +1,4 @@
-package ru.lastenko.studenttest.service;
+package ru.lastenko.studenttest.shell;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.Availability;
@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 import ru.lastenko.studenttest.i18n.LocaleToggle;
+import ru.lastenko.studenttest.service.ExamExecutor;
 
 import static org.springframework.shell.Availability.available;
 import static org.springframework.shell.Availability.unavailable;
