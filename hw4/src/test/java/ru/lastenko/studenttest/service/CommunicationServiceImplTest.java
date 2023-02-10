@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class CommunicationServiceImplTest {
 
-    @MockBean
+    @MockBean(name = "messageSource")
     private MessageSource messageSource;
     @MockBean
     private ApplicationProperties applicationProperties;
