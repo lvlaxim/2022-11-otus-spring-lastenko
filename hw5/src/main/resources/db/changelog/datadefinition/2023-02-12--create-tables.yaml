@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-02-12--create-authors-table
+      author: lvlaxim
+      createTable:
+        tableName: authors
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_author
+          - column:
+              name: full_name
+              type: varchar(50)
+  - changeSet:
+      id: 2023-02-12--create-genres-table
+      author: lvlaxim
+      createTable:
+        tableName: genres
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_genre
+          - column:
+              name: name
+              type: varchar(50)
+  - changeSet:
+      id: 2023-02-12--create-books-table
+      author: lvlaxim
+      createTable:
+        tableName: books
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_book
+          - column:
+              name: name
+              type: varchar(50)
+          - column:
+              name: author_id
+              type: bigint
+              constraints:
+                nullable: false
+                foreignKeyName: fk_books_authors
+                references: authors(id)
+                deleteCascade: true
+          - column:
+              name: genre_id
+              type: bigint
+              constraints:
+                nullable: false
+                foreignKeyName: fk_books_genres
+                references: genres(id)
+                deleteCascade: true
