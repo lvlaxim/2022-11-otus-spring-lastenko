@@ -4,6 +4,7 @@ databaseChangeLog:
       author: lvlaxim
       createTable:
         tableName: authors
+        startWith: 100
         columns:
           - column:
               name: id
@@ -26,6 +27,7 @@ databaseChangeLog:
               name: id
               type: bigint
               autoIncrement: true
+              startWith: 100
               constraints:
                 nullable: false
                 primaryKey: true
@@ -43,6 +45,7 @@ databaseChangeLog:
               name: id
               type: bigint
               autoIncrement: true
+              startWith: 100
               constraints:
                 nullable: false
                 primaryKey: true
