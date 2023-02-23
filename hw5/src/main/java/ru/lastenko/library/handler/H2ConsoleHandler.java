@@ -11,13 +11,15 @@ import ru.lastenko.library.exceptions.BrowserException;
 public class H2ConsoleHandler implements DbConsoleHandler {
 
     public static final String H2_CONSOLE_URI = "http://localhost:8080/h2-console";
+
+    //@Value стоит здесь, поскольку конструктор генерируется lombok. На самом деле параметр задается через конструктор.
     @Value("${spring.datasource.url}")
     private final String url;
     private final BrowserHandler browserHandler;
 
     @Override
     public String openConsoleInBrowserAndGetUrlMsg() {
-        String sucessMessage = "Консоль базы данных открыта.";
+        String successMessage = "Консоль базы данных открыта.";
         String message = "Используйте JDBC URL: ";
         try {
             browserHandler.browse(H2_CONSOLE_URI);
@@ -26,7 +28,7 @@ public class H2ConsoleHandler implements DbConsoleHandler {
                     H2_CONSOLE_URI);
             return errorMessage + System.lineSeparator() + message + url;
         }
-        return sucessMessage + System.lineSeparator() + message + url;
+        return successMessage + System.lineSeparator() + message + url;
     }
 
 
