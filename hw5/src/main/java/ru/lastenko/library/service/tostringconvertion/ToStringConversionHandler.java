@@ -7,4 +7,6 @@ public interface ToStringConversionHandler {
     String convertToString(Object o);
 
     String convertToString(Collection<?> objects);
+
+    String convertToStringWithSelection(Collection<?> objects, Object selectedObject);
 }

@@ -1,6 +1,7 @@
 package ru.lastenko.library.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
@@ -45,7 +46,13 @@ public class BookDaoJdbc implements BookDao {
                         "left join genres on books.genre_id=genres.id " +
                         "where books.id = :id";
         Map<String, Object> params = Map.of("id", id);
-        return namedParameterJdbcOperations.queryForObject(sqlQuery, params, new BookDaoJdbc.BookMapper());
+        Book book;
+        try {
+            book = namedParameterJdbcOperations.queryForObject(sqlQuery, params, new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("Incorrect book id", e);
+        }
+        return book;
     }
 
     @Override
@@ -60,7 +67,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         String sqlQuery = "delete from books where id = :id";
         Map<String, Object> params = Map.of("id", id);
         namedParameterJdbcOperations.update(sqlQuery, params);

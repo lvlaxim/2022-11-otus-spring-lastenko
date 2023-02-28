@@ -24,7 +24,6 @@ public class IdentifiableServiceImpl implements IdentifiableService {
             try {
                 id = Long.parseLong(idAsStr);
             } catch (NumberFormatException e) {
-                ioService.outputString("введно некорректное значение");
                 continue;
             }
             entity = entities.stream()

@@ -39,6 +39,14 @@ public class ToStringConversionHandlerImpl implements ToStringConversionHandler 
         return String.join(System.lineSeparator(), convertedObjects);
     }
 
+    @Override
+    public String convertToStringWithSelection(Collection<?> objects, Object selectedObject) {
+        List<String> convertedObjects = objects.stream()
+                .map(o -> o.equals(selectedObject) ? " ->\t" + convertToString(o) : "\t" + convertToString(o))
+                .collect(Collectors.toList());
+        return String.join(System.lineSeparator(), convertedObjects);
+    }
+
     private ToStringConverter getToStringConverterFor(Class clazz) {
         return toStringConverterMap.get(clazz);
     }

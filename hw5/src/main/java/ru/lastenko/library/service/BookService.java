@@ -12,8 +12,8 @@ public interface BookService {
 
     Book getBy(long id);
 
-    void selectAndUpdate();
+    Book update(Book book);
 
-    void selectAndDelete();
+    void delete(Book book);
 
 }

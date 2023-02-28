@@ -1,8 +1,10 @@
 package ru.lastenko.library.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 import ru.lastenko.library.domain.Author;
 import ru.lastenko.library.domain.Book;
@@ -14,6 +16,10 @@ import ru.lastenko.library.service.GenreService;
 import ru.lastenko.library.service.tostringconvertion.ToStringConversionHandler;
 
 import java.util.List;
+
+import static java.util.Objects.nonNull;
+import static org.springframework.shell.Availability.available;
+import static org.springframework.shell.Availability.unavailable;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -46,32 +52,49 @@ public class ShellCommands {
 
     @ShellMethod(value = "Show all books.", key = {"bs"})
     public String showAllBooks() {
-        List<Book> books = bookService.getAll();
-        return toStringConversionHandler.convertToString(books);
+        return booksAsString();
     }
 
     @ShellMethod(value = "Insert new book.", key = {"i"})
     public String insertBook() {
         bookService.getAndSave();
-        return "Книга добавлена!";
+        return booksAsString();
     }
 
-    @ShellMethod(value = "Show book by id.", key = {"g"})
-    public String showBookById(@ShellOption() long id) {
-        Book book = bookService.getBy(id);
-        return toStringConversionHandler.convertToString(book);
+    @ShellMethod(value = "Select book by id.", key = {"g"})
+    public String selectBookById(@ShellOption() String idAsString) {
+        long id;
+        try {
+            id = Long.parseLong(idAsString);
+        } catch (NumberFormatException e) {
+            return "Введите число!";
+        }
+        selectedBook = bookService.getBy(id);
+        return booksAsString();
     }
 
-    @ShellMethod(value = "Update book by id.", key = {"u"})
+    @ShellMethod(value = "Update selected book.", key = {"u"})
+    @ShellMethodAvailability(value = "bookIsSelected")
     public String updateBook() {
-        bookService.selectAndUpdate();
-        return "Книга обновлена!";
+        selectedBook = bookService.update(selectedBook);
+        return booksAsString();
     }
 
-    @ShellMethod(value = "Delete book by id.", key = {"d"})
+    @ShellMethod(value = "Delete selected book.", key = {"d"})
+    @ShellMethodAvailability(value = "bookIsSelected")
     public String deleteBookById() {
-        bookService.selectAndDelete();
-        return "Книга удалена!";
+        bookService.delete(selectedBook);
+        selectedBook = null;
+        return booksAsString();
     }
 
+    private String booksAsString() {
+        List<Book> books = bookService.getAll();
+        return toStringConversionHandler.convertToStringWithSelection(books, selectedBook);
+    }
+
+    private Availability bookIsSelected() {
+        String message = "a book must be selected. Use \"g\" command to select a book.";
+        return nonNull(selectedBook) ? available() : unavailable(message);
+    }
 }

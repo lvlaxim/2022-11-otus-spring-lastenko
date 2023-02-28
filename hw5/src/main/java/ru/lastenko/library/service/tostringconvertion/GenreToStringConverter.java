@@ -8,7 +8,7 @@ import ru.lastenko.library.domain.Genre;
 @RequiredArgsConstructor
 public class GenreToStringConverter implements ToStringConverter<Genre> {
     @Override
-    public Class getConvertedClass() {
+    public Class<Genre> getConvertedClass() {
         return Genre.class;
     }
 

@@ -13,7 +13,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookInputService bookInputService;
     private final BookDao bookDao;
-    private final IdentifiableService identifiableService;
     private final IOService ioService;
 
 
@@ -30,31 +29,30 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBy(long id) {
-        return bookDao.getById(id);
+        Book book = null;
+        try {
+            book = bookDao.getById(id);
+        } catch (IllegalArgumentException e) {
+            ioService.outputString("Введен несущестующий id! Выберите из списка:");
+        }
+        return book;
     }
 
     @Override
-    public void selectAndUpdate() {
-        Book selectedBook = selecteBook();
+    public Book update(Book book) {
         Book bookWithUpdates = bookInputService.getBook();
         Book updatedBook = new Book(
-                selectedBook.getId(),
+                book.getId(),
                 bookWithUpdates.getName(),
                 bookWithUpdates.getAuthor(),
                 bookWithUpdates.getGenre());
         bookDao.update(updatedBook);
+        return updatedBook;
     }
 
     @Override
-    public void selectAndDelete() {
-        Book selectedBook = selecteBook();
-        long selectedBookId = selectedBook.getId();
-        bookDao.delete(selectedBookId);
-    }
-
-    private Book selecteBook() {
-        ioService.outputString("Выберите книгу из списка:");
-        List<Book> books = bookDao.getAll();
-        return identifiableService.selectByIdFrom(books);
+    public void delete(Book book) {
+        long bookId = book.getId();
+        bookDao.deleteById(bookId);
     }
 }

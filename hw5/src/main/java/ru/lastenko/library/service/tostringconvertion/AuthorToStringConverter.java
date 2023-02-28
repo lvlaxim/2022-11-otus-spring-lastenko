@@ -9,7 +9,7 @@ import ru.lastenko.library.domain.Author;
 public class AuthorToStringConverter implements ToStringConverter<Author> {
 
     @Override
-    public Class getConvertedClass() {
+    public Class<Author> getConvertedClass() {
         return Author.class;
     }
 
