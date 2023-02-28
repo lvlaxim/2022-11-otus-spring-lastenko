@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.lastenko.library.service.IOService;
 import ru.lastenko.library.service.IOServiceStreams;
+import ru.lastenko.library.service.tostringconvertion.ToStringConversionHandler;
 
 import java.util.Scanner;
 
@@ -11,8 +12,8 @@ import java.util.Scanner;
 public class ApplicationConfig {
 
     @Bean
-    public IOService ioService() {
+    public IOService ioService(ToStringConversionHandler toStringConversionHandler) {
         var scanner = new Scanner(System.in);
-        return new IOServiceStreams(System.out, scanner);
+        return new IOServiceStreams(System.out, scanner, toStringConversionHandler);
     }
 }

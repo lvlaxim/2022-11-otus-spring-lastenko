@@ -34,6 +34,7 @@ public class BookInputServiceImpl implements BookInputService {
         List<Author> authors = authorService.getAll();
         return identifiableService.selectByIdFrom(authors);
     }
+
     private Genre getGenre() {
         ioService.outputString("Выберите жанр книги из списка:");
         List<Genre> genres = genreService.getAll();

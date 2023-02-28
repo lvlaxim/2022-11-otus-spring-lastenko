@@ -15,7 +15,7 @@ public class IdentifiableServiceImpl implements IdentifiableService {
 
     @Override
     public <T extends Identifiable> T selectByIdFrom(Collection<T> entities) {
-        ioService.outputString(entities.toString());
+        ioService.output(entities);
         Optional<T> entity = Optional.empty();
         while (entity.isEmpty()) {
             ioService.outputString("введите id-номер из списка выше");
