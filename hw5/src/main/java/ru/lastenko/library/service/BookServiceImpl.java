@@ -14,7 +14,7 @@ public class BookServiceImpl implements BookService {
     private final BookInputService bookInputService;
     private final BookDao bookDao;
     private final IOService ioService;
-
+    private final IdentifiableService identifiableService;
 
     @Override
     public List<Book> getAll() {
@@ -54,5 +54,12 @@ public class BookServiceImpl implements BookService {
     public void delete(Book book) {
         long bookId = book.getId();
         bookDao.deleteById(bookId);
+    }
+
+    @Override
+    public Book selectBook() {
+        ioService.outputString("Выберите книгу из списка:");
+        List<Book> books = getAll();
+        return identifiableService.selectByIdFrom(books);
     }
 }

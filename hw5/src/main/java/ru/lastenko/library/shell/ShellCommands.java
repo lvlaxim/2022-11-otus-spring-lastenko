@@ -61,7 +61,13 @@ public class ShellCommands {
         return booksAsString();
     }
 
-    @ShellMethod(value = "Select book by id.", key = {"g"})
+    @ShellMethod(value = "Select book from all.", key = {"g"})
+    public String selectBook() {
+        selectedBook = bookService.selectBook();
+        return booksAsString();
+    }
+
+    @ShellMethod(value = "Select book by id.", key = {"gid"})
     public String selectBookById(@ShellOption() String idAsString) {
         long id;
         try {
@@ -94,7 +100,7 @@ public class ShellCommands {
     }
 
     private Availability bookIsSelected() {
-        String message = "a book must be selected. Use \"g\" command to select a book.";
+        String message = "a book must be selected. Use \"g\" or \"gid\" command to select a book.";
         return nonNull(selectedBook) ? available() : unavailable(message);
     }
 }

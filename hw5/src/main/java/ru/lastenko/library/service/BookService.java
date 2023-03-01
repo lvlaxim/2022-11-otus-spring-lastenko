@@ -16,4 +16,6 @@ public interface BookService {
 
     void delete(Book book);
 
+    Book selectBook();
+
 }

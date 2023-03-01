@@ -19,8 +19,8 @@ public class BookInputServiceImpl implements BookInputService {
 
     public Book getBook() {
         String name = getName();
-        Author author = getAuthor();
-        Genre genre = getGenre();
+        Author author = selectAuthor();
+        Genre genre = selectGenre();
         return new Book(0, name, author, genre);
     }
 
@@ -29,13 +29,13 @@ public class BookInputServiceImpl implements BookInputService {
         return ioService.readString();
     }
 
-    private Author getAuthor() {
+    private Author selectAuthor() {
         ioService.outputString("Выберите автора книги из списка:");
         List<Author> authors = authorService.getAll();
         return identifiableService.selectByIdFrom(authors);
     }
 
-    private Genre getGenre() {
+    private Genre selectGenre() {
         ioService.outputString("Выберите жанр книги из списка:");
         List<Genre> genres = genreService.getAll();
         return identifiableService.selectByIdFrom(genres);
