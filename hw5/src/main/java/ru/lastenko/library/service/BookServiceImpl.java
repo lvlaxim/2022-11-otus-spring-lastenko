@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
         try {
             book = bookDao.getById(id);
         } catch (IllegalArgumentException e) {
-            ioService.outputString("Введен несущестующий id! Выберите из списка:");
+            ioService.outputString("Введен несущестующий id!");
         }
         return book;
     }
