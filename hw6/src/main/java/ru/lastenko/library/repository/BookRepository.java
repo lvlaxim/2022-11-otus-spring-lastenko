@@ -1,10 +1,10 @@
-package ru.lastenko.library.dao;
+package ru.lastenko.library.repository;
 
-import ru.lastenko.library.domain.Book;
+import ru.lastenko.library.model.Book;
 
 import java.util.List;
 
-public interface BookDao {
+public interface BookRepository {
     List<Book> getAll();
 
     void insert(Book book);
@@ -13,6 +13,6 @@ public interface BookDao {
 
     void update(Book book);
 
-    void deleteById(long id);
+    void delete(Book book);
 
 }

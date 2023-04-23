@@ -1,10 +1,9 @@
-package ru.lastenko.library.service;
+package ru.lastenko.library.repository;
 
 import ru.lastenko.library.model.Genre;
 
 import java.util.List;
 
-public interface GenreService {
-
+public interface GenreRepository {
     List<Genre> getAll();
 }

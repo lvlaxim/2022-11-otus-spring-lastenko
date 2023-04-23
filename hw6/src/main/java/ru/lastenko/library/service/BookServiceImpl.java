@@ -2,36 +2,39 @@ package ru.lastenko.library.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.library.dao.BookDao;
-import ru.lastenko.library.domain.Book;
+import org.springframework.transaction.annotation.Transactional;
+import ru.lastenko.library.model.Book;
+import ru.lastenko.library.repository.BookRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
     private final BookInputService bookInputService;
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
     private final IOService ioService;
     private final IdentifiableService identifiableService;
 
     @Override
     public List<Book> getAll() {
-        return bookDao.getAll();
+        return bookRepository.getAll();
     }
 
     @Override
+    @Transactional
     public void getAndSave() {
         Book book = bookInputService.getBook();
-        bookDao.insert(book);
+        bookRepository.insert(book);
     }
 
     @Override
     public Book getBy(long id) {
         Book book = null;
         try {
-            book = bookDao.getById(id);
+            book = bookRepository.getById(id);
         } catch (IllegalArgumentException e) {
             ioService.outputString("Введен несущестующий id!");
         }
@@ -39,6 +42,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book update(Book book) {
         Book bookWithUpdates = bookInputService.getBook();
         Book updatedBook = new Book(
@@ -46,14 +50,14 @@ public class BookServiceImpl implements BookService {
                 bookWithUpdates.getName(),
                 bookWithUpdates.getAuthor(),
                 bookWithUpdates.getGenre());
-        bookDao.update(updatedBook);
+        bookRepository.update(updatedBook);
         return updatedBook;
     }
 
     @Override
+    @Transactional
     public void delete(Book book) {
-        long bookId = book.getId();
-        bookDao.deleteById(bookId);
+        bookRepository.delete(book);
     }
 
     @Override

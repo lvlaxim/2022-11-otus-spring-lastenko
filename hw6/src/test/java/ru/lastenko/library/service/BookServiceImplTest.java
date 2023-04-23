@@ -7,10 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.lastenko.library.dao.BookDao;
-import ru.lastenko.library.domain.Author;
-import ru.lastenko.library.domain.Book;
-import ru.lastenko.library.domain.Genre;
+import ru.lastenko.library.repository.BookRepository;
+import ru.lastenko.library.model.Author;
+import ru.lastenko.library.model.Book;
+import ru.lastenko.library.model.Genre;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ class BookServiceImplTest {
     @Mock
     private BookInputService bookInputService;
     @Mock
-    private BookDao bookDao;
+    private BookRepository bookRepository;
     @Mock
     private IOService ioService;
     @Mock
@@ -39,7 +39,7 @@ class BookServiceImplTest {
     @DisplayName("вернуть все книги")
     void shouldGetAllBooks() {
         var books = easyRandom.objects(Book.class, 3).collect(Collectors.toList());
-        when(bookDao.getAll()).thenReturn(books);
+        when(bookRepository.getAll()).thenReturn(books);
 
         List<Book> actualBooks = bookService.getAll();
 
@@ -55,7 +55,7 @@ class BookServiceImplTest {
         bookService.getAndSave();
 
         verify(bookInputService, times(1)).getBook();
-        verify(bookDao, times(1)).insert(book);
+        verify(bookRepository, times(1)).insert(book);
     }
 
     @Test
@@ -63,7 +63,7 @@ class BookServiceImplTest {
     void shouldGetBookById() {
         var book = easyRandom.nextObject(Book.class);
         long id = book.getId();
-        when(bookDao.getById(id)).thenReturn(book);
+        when(bookRepository.getById(id)).thenReturn(book);
 
         Book receivedBook = bookService.getBy(id);
 
@@ -73,7 +73,7 @@ class BookServiceImplTest {
     @Test
     @DisplayName("сообщить о несуществующем id при запросе и вернуть null")
     void shouldOutputIncorrectIdMessage() {
-        when(bookDao.getById(anyLong())).thenThrow(IllegalArgumentException.class);
+        when(bookRepository.getById(anyLong())).thenThrow(IllegalArgumentException.class);
 
         Book receivedBook = bookService.getBy(12345L);
 
@@ -96,7 +96,7 @@ class BookServiceImplTest {
         Book updatedBook = bookService.update(originalBook);
 
         verify(bookInputService, times(1)).getBook();
-        verify(bookDao, times(1)).update(bookWithUpdates);
+        verify(bookRepository, times(1)).update(bookWithUpdates);
         assertThat(updatedBook)
                 .isNotNull()
                 .isEqualTo(bookWithUpdates)
@@ -110,14 +110,14 @@ class BookServiceImplTest {
 
         bookService.delete(book);
 
-        verify(bookDao, times(1)).deleteById(book.getId());
+        verify(bookRepository, times(1)).delete(book);
     }
 
     @Test
     @DisplayName("получить все книги и выбрать одну из них")
     void shouldSelectBook() {
         var books = easyRandom.objects(Book.class, 3).collect(Collectors.toList());
-        when(bookDao.getAll()).thenReturn(books);
+        when(bookRepository.getAll()).thenReturn(books);
         Book selectedBook = books.get(0);
         when(identifiableService.selectByIdFrom(books)).thenReturn(selectedBook);
 

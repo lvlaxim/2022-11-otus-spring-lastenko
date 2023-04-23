@@ -2,7 +2,7 @@ package ru.lastenko.library.service.tostringconvertion;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.library.domain.Author;
+import ru.lastenko.library.model.Author;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package ru.lastenko.library.service;
 
-import ru.lastenko.library.domain.Identifiable;
+import ru.lastenko.library.model.Identifiable;
 
 import java.util.Collection;
 

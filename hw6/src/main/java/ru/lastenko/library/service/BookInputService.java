@@ -1,6 +1,6 @@
 package ru.lastenko.library.service;
 
-import ru.lastenko.library.domain.Book;
+import ru.lastenko.library.model.Book;
 
 public interface BookInputService {
 

@@ -2,8 +2,8 @@ package ru.lastenko.library.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.library.dao.AuthorDao;
-import ru.lastenko.library.domain.Author;
+import ru.lastenko.library.repository.AuthorRepository;
+import ru.lastenko.library.model.Author;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
     @Override
     public List<Author> getAll() {
-        return authorDao.getAll();
+        return authorRepository.getAll();
     }
 }

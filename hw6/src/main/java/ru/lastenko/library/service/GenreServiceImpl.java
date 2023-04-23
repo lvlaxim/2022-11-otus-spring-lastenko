@@ -2,8 +2,8 @@ package ru.lastenko.library.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.library.dao.GenreDao;
-import ru.lastenko.library.domain.Genre;
+import ru.lastenko.library.repository.GenreRepository;
+import ru.lastenko.library.model.Genre;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
     @Override
     public List<Genre> getAll() {
-        return genreDao.getAll();
+        return genreRepository.getAll();
     }
 }

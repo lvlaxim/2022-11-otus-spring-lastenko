@@ -2,9 +2,9 @@ package ru.lastenko.library.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lastenko.library.domain.Author;
-import ru.lastenko.library.domain.Book;
-import ru.lastenko.library.domain.Genre;
+import ru.lastenko.library.model.Author;
+import ru.lastenko.library.model.Book;
+import ru.lastenko.library.model.Genre;
 
 import java.util.List;
 

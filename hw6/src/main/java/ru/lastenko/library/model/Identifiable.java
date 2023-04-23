@@ -1,4 +1,4 @@
-package ru.lastenko.library.domain;
+package ru.lastenko.library.model;
 
 public interface Identifiable {
 
