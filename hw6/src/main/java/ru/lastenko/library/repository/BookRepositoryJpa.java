@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.lastenko.library.model.Book;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -18,7 +20,9 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public List<Book> getAll() {
-        return entityManager.createQuery("select b from Book b", Book.class).getResultList();
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
+        setBookEntityGraphTo(query);
+        return query.getResultList();
     }
 
     @Override
@@ -44,5 +48,10 @@ public class BookRepositoryJpa implements BookRepository {
     public void delete(Book book) {
         Book mergedBook = entityManager.merge(book);
         entityManager.remove(mergedBook);
+    }
+
+    private void setBookEntityGraphTo(TypedQuery<Book> query) {
+        EntityGraph<?> bookEntityGraph = entityManager.getEntityGraph("book-entity-graph");
+        query.setHint("javax.persistence.fetchgraph", bookEntityGraph);
     }
 }
