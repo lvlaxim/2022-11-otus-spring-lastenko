@@ -26,10 +26,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void insertCommentFor(Book selectedBook) {
+    public Comment getAndSaveCommentFor(Book book) {
         Comment comment = commentInputService.getComment();
-        comment.setBook(selectedBook);
-        commentRepository.insert(comment);
+        comment.setBook(book);
+        return commentRepository.insert(comment);
     }
 
     @Override

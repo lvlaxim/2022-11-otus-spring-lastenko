@@ -25,9 +25,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void getAndSave() {
+    public Book getAndSave() {
         Book book = bookInputService.getBook();
-        bookRepository.insert(book);
+        return bookRepository.insert(book);
     }
 
     @Override
@@ -45,13 +45,8 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public Book update(Book book) {
         Book bookWithUpdates = bookInputService.getBook();
-        Book updatedBook = new Book(
-                book.getId(),
-                bookWithUpdates.getName(),
-                bookWithUpdates.getAuthor(),
-                bookWithUpdates.getGenre());
-        bookRepository.update(updatedBook);
-        return updatedBook;
+        bookWithUpdates.setId(book.getId());
+        return bookRepository.update(bookWithUpdates);
     }
 
     @Override

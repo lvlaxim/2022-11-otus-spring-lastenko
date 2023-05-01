@@ -61,7 +61,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Insert new book.", key = {"i"})
     public String insertBook() {
-        bookService.getAndSave();
+        selectedBook = bookService.getAndSave();
         return booksAsString();
     }
 
@@ -109,7 +109,7 @@ public class ShellCommands {
     @ShellMethod(value = "Insert new comment for selected book.", key = {"ic"})
     @ShellMethodAvailability(value = "bookIsSelected")
     public String insertComment() {
-        commentService.insertCommentFor(selectedBook);
+        selectedComment = commentService.getAndSaveCommentFor(selectedBook);
         return bookCommentsAsString();
     }
 

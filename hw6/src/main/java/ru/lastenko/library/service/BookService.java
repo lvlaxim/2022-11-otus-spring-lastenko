@@ -8,7 +8,7 @@ public interface BookService {
 
     List<Book> getAll();
 
-    void getAndSave();
+    Book getAndSave();
 
     Book getBy(long id);
 
@@ -17,5 +17,4 @@ public interface BookService {
     void delete(Book book);
 
     Book selectBook();
-
 }

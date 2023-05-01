@@ -5,13 +5,14 @@ import ru.lastenko.library.model.Book;
 import java.util.List;
 
 public interface BookRepository {
+
     List<Book> getAll();
 
-    void insert(Book book);
+    Book insert(Book book);
 
     Book getBy(long id);
 
-    void update(Book book);
+    Book update(Book book);
 
     void delete(Book book);
 

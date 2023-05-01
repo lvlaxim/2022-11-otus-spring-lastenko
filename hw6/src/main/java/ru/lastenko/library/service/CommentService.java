@@ -6,10 +6,16 @@ import ru.lastenko.library.model.Comment;
 import java.util.List;
 
 public interface CommentService {
+
     List<Comment> getAllFor(Book book);
-    void insertCommentFor(Book selectedBook);
+
+    Comment getAndSaveCommentFor(Book book);
+
     Comment getBy(long id);
+
     Comment update(Comment comment);
+
     void delete(Comment comment);
+
     Comment selectBookComment(Book book);
 }

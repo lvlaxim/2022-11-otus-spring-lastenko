@@ -26,8 +26,9 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public void insert(Book book) {
+    public Book insert(Book book) {
         entityManager.persist(book);
+        return book;
     }
 
     @Override
@@ -40,8 +41,8 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public void update(Book book) {
-        entityManager.merge(book);
+    public Book update(Book book) {
+        return entityManager.merge(book);
     }
 
     @Override

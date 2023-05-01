@@ -45,12 +45,14 @@ class BookRepositoryJpaTest {
         var name = "Новая книга";
         var newBook = new Book(0, name, EXISTED_AUTHOR, EXISTED_GENRE);
 
-        bookRepositoryJpa.insert(newBook);
+        Book savedBook = bookRepositoryJpa.insert(newBook);
 
-        Book receivedBook = entityManager.find(Book.class, 100L);
-
+        Book foundBook = entityManager.find(Book.class, 100L);
         var expectedBook = new Book(100, name, EXISTED_AUTHOR, EXISTED_GENRE);
-        assertThat(receivedBook).isEqualTo(expectedBook);
+        assertThat(foundBook)
+                .isNotNull()
+                .isEqualTo(savedBook)
+                .isEqualTo(expectedBook);
     }
 
     @Test
@@ -78,11 +80,13 @@ class BookRepositoryJpaTest {
     void shouldUpdateBook() {
         var bookWithUpdates = new Book(EXISTED_BOOK.getId(), "Обновленное название", EXISTED_BOOK.getAuthor(), EXISTED_BOOK.getGenre());
 
-        bookRepositoryJpa.update(bookWithUpdates);
+        Book updatedBook = bookRepositoryJpa.update(bookWithUpdates);
 
-        var updatedBook = entityManager.find(Book.class, bookWithUpdates.getId());
-        assertThat(updatedBook)
+        long bookId = bookWithUpdates.getId();
+        var foundBook = entityManager.find(Book.class, bookId);
+        assertThat(foundBook)
                 .isNotNull()
+                .isEqualTo(updatedBook)
                 .isEqualTo(bookWithUpdates)
                 .isNotEqualTo(EXISTED_BOOK);
     }

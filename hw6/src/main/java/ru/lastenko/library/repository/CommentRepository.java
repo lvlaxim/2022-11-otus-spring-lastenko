@@ -6,9 +6,10 @@ import ru.lastenko.library.model.Comment;
 import java.util.List;
 
 public interface CommentRepository {
+
     List<Comment> getAllFor(Book book);
 
-    void insert(Comment comment);
+    Comment insert(Comment comment);
 
     Comment getBy(long id);
 
