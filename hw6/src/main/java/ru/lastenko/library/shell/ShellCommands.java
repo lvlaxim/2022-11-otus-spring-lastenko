@@ -6,12 +6,14 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
+import ru.lastenko.library.handler.DbConsoleHandler;
 import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
+import ru.lastenko.library.model.Comment;
 import ru.lastenko.library.model.Genre;
-import ru.lastenko.library.handler.DbConsoleHandler;
 import ru.lastenko.library.service.AuthorService;
 import ru.lastenko.library.service.BookService;
+import ru.lastenko.library.service.CommentService;
 import ru.lastenko.library.service.GenreService;
 import ru.lastenko.library.service.tostringconvertion.ToStringConversionHandler;
 
@@ -29,9 +31,11 @@ public class ShellCommands {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final BookService bookService;
+    private final CommentService commentService;
     private final ToStringConversionHandler toStringConversionHandler;
 
     private Book selectedBook;
+    private Comment selectedComment;
 
     @ShellMethod(value = "Open DB console.", key = {"dbc"})
     public String showDbConsole() {
@@ -64,6 +68,7 @@ public class ShellCommands {
     @ShellMethod(value = "Select book from all.", key = {"g"})
     public String selectBook() {
         selectedBook = bookService.selectBook();
+        selectedComment = null;
         return booksAsString();
     }
 
@@ -76,6 +81,7 @@ public class ShellCommands {
             return "Введите число!";
         }
         selectedBook = bookService.getBy(id);
+        selectedComment = null;
         return booksAsString();
     }
 
@@ -94,13 +100,58 @@ public class ShellCommands {
         return booksAsString();
     }
 
+    @ShellMethod(value = "Show all book comments.", key = {"cs"})
+    @ShellMethodAvailability(value = "bookIsSelected")
+    public String getAllBookComments() {
+        return bookCommentsAsString();
+    }
+
+    @ShellMethod(value = "Insert new comment for selected book.", key = {"ic"})
+    @ShellMethodAvailability(value = "bookIsSelected")
+    public String insertComment() {
+        commentService.insertCommentFor(selectedBook);
+        return bookCommentsAsString();
+    }
+
+    @ShellMethod(value = "Select comment for book.", key = {"gc"})
+    @ShellMethodAvailability(value = "bookIsSelected")
+    public String selectBookComment() {
+        selectedComment = commentService.selectBookComment(selectedBook);
+        return bookCommentsAsString();
+    }
+
+    @ShellMethod(value = "Update selected comment.", key = {"uc"})
+    @ShellMethodAvailability(value = "commentIsSelected")
+    public String updateComment() {
+        selectedComment = commentService.update(selectedComment);
+        return bookCommentsAsString();
+    }
+
+    @ShellMethod(value = "Delete selected comment.", key = {"dc"})
+    @ShellMethodAvailability(value = "commentIsSelected")
+    public String deleteComment() {
+        commentService.delete(selectedComment);
+        selectedComment = null;
+        return bookCommentsAsString();
+    }
+
     private String booksAsString() {
         List<Book> books = bookService.getAll();
         return toStringConversionHandler.convertToStringWithSelection(books, selectedBook);
     }
 
+    private String bookCommentsAsString() {
+        List<Comment> comments = commentService.getAllFor(selectedBook);
+        return toStringConversionHandler.convertToStringWithSelection(comments, selectedComment);
+    }
+
     private Availability bookIsSelected() {
         String message = "a book must be selected. Use \"g\" or \"gid\" command to select a book.";
         return nonNull(selectedBook) ? available() : unavailable(message);
+    }
+
+    private Availability commentIsSelected() {
+        String message = "a comment must be selected. Use \"gc\" or \"gcid\" command to select a comment.";
+        return nonNull(selectedComment) ? available() : unavailable(message);
     }
 }

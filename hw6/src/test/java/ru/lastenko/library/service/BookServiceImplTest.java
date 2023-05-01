@@ -63,7 +63,7 @@ class BookServiceImplTest {
     void shouldGetBookById() {
         var book = easyRandom.nextObject(Book.class);
         long id = book.getId();
-        when(bookRepository.getById(id)).thenReturn(book);
+        when(bookRepository.getBy(id)).thenReturn(book);
 
         Book receivedBook = bookService.getBy(id);
 
@@ -73,7 +73,7 @@ class BookServiceImplTest {
     @Test
     @DisplayName("сообщить о несуществующем id при запросе и вернуть null")
     void shouldOutputIncorrectIdMessage() {
-        when(bookRepository.getById(anyLong())).thenThrow(IllegalArgumentException.class);
+        when(bookRepository.getBy(anyLong())).thenThrow(IllegalArgumentException.class);
 
         Book receivedBook = bookService.getBy(12345L);
 

@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
     public Book getBy(long id) {
         Book book = null;
         try {
-            book = bookRepository.getById(id);
+            book = bookRepository.getBy(id);
         } catch (IllegalArgumentException e) {
             ioService.outputString("Введен несущестующий id!");
         }

@@ -28,4 +28,7 @@ public class Book implements Identifiable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
+
+//    @OneToMany(mappedBy = "book")
+//    private List<Comment> comments;
 }

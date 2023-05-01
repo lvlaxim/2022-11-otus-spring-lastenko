@@ -58,7 +58,7 @@ class BookRepositoryJpaTest {
     void shouldGetBookById() {
         long id = EXISTED_BOOK.getId();
 
-        Book receivedBook = bookRepositoryJpa.getById(id);
+        Book receivedBook = bookRepositoryJpa.getBy(id);
 
         assertThat(receivedBook)
                 .isNotNull()
@@ -68,7 +68,7 @@ class BookRepositoryJpaTest {
     @Test
     @DisplayName("кинуть ошибку при получении книги из БД по некорректому id")
     void throwsExceptionWenGetBookById() {
-        assertThatThrownBy(() -> bookRepositoryJpa.getById(12345))
+        assertThatThrownBy(() -> bookRepositoryJpa.getBy(12345))
                 .isInstanceOf(IllegalArgumentException.class)
                 .message().isEqualTo("Incorrect book id");
     }

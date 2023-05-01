@@ -31,7 +31,7 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public Book getById(long id) {
+    public Book getBy(long id) {
         Book book = entityManager.find(Book.class, id);
         if (isNull(book)) {
             throw new IllegalArgumentException("Incorrect book id");

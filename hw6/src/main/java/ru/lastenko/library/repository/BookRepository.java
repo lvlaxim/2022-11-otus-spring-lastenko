@@ -9,7 +9,7 @@ public interface BookRepository {
 
     void insert(Book book);
 
-    Book getById(long id);
+    Book getBy(long id);
 
     void update(Book book);
 
