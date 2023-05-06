@@ -1,12 +1,12 @@
 package ru.lastenko.library.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.h2.tools.Console;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
-import ru.lastenko.library.handler.DbConsoleHandler;
 import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.model.Comment;
@@ -17,6 +17,7 @@ import ru.lastenko.library.service.CommentService;
 import ru.lastenko.library.service.GenreService;
 import ru.lastenko.library.service.tostringconvertion.ToStringConversionHandler;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
@@ -27,7 +28,6 @@ import static org.springframework.shell.Availability.unavailable;
 @RequiredArgsConstructor
 public class ShellCommands {
 
-    private final DbConsoleHandler dbConsoleHandler;
     private final AuthorService authorService;
     private final GenreService genreService;
     private final BookService bookService;
@@ -38,8 +38,9 @@ public class ShellCommands {
     private Comment selectedComment;
 
     @ShellMethod(value = "Open DB console.", key = {"dbc"})
-    public String showDbConsole() {
-        return dbConsoleHandler.openConsoleInBrowserAndGetUrlMsg();
+    public String showDbConsole() throws SQLException {
+        Console.main();
+        return "Консоль базы данных открыта.";
     }
 
     @ShellMethod(value = "Show all authors.", key = {"as"})

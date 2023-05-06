@@ -1,9 +1,6 @@
 spring:
   datasource:
     url: jdbc:h2:mem:librarydb
-  h2:
-    console:
-      enabled: true
   jpa:
     generate-ddl: false
     hibernate:
