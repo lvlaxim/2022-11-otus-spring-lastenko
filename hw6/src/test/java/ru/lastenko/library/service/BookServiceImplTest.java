@@ -7,10 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.lastenko.library.repository.BookRepository;
-import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
-import ru.lastenko.library.model.Genre;
+import ru.lastenko.library.repository.BookRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,16 +65,19 @@ class BookServiceImplTest {
 
         Book receivedBook = bookService.getBy(id);
 
+        verify(bookRepository, times(1)).getBy(id);
         assertThat(receivedBook).isEqualTo(book);
     }
 
     @Test
     @DisplayName("сообщить о несуществующем id при запросе и вернуть null")
     void shouldOutputIncorrectIdMessage() {
-        when(bookRepository.getBy(anyLong())).thenThrow(IllegalArgumentException.class);
+        long id = 12345L;
+        when(bookRepository.getBy(id)).thenThrow(IllegalArgumentException.class);
 
-        Book receivedBook = bookService.getBy(12345L);
+        Book receivedBook = bookService.getBy(id);
 
+        verify(bookRepository, times(1)).getBy(id);
         verify(ioService, times(1)).outputString("Введен несущестующий id!");
         assertThat(receivedBook).isNull();
     }
@@ -85,13 +86,9 @@ class BookServiceImplTest {
     @DisplayName("получить книгу с изменениями и обновить ею оригинальную")
     void shouldUpdateBook() {
         var originalBook = easyRandom.nextObject(Book.class);
-        var bookWithUpdates = new Book(
-                originalBook.getId(),
-                "Книга с обновлениями",
-                easyRandom.nextObject(Author.class),
-                easyRandom.nextObject(Genre.class)
-        );
+        var bookWithUpdates = easyRandom.nextObject(Book.class);
         when(bookInputService.getBook()).thenReturn(bookWithUpdates);
+        when(bookRepository.update(bookWithUpdates)).thenReturn(bookWithUpdates);
 
         Book updatedBook = bookService.update(originalBook);
 
@@ -123,6 +120,9 @@ class BookServiceImplTest {
 
         Book receivedBook = bookService.selectBook();
 
+        verify(ioService, times(1)).outputString("Выберите книгу из списка:");
+        verify(bookRepository, times(1)).getAll();
+        verify(identifiableService, times(1)).selectByIdFrom(books);
         assertThat(receivedBook).isEqualTo(selectedBook);
     }
 
