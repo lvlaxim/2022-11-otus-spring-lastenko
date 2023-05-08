@@ -9,12 +9,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.isNull;
 
 @Repository
 @RequiredArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
+    public static final String JAVAX_PERSISTENCE_FETCHGRAPH = "javax.persistence.fetchgraph";
+
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -33,7 +36,9 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Book getBy(long id) {
-        Book book = entityManager.find(Book.class, id);
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-entity-graph");
+        Book book = entityManager.find(Book.class, id,
+                Map.of(JAVAX_PERSISTENCE_FETCHGRAPH, entityGraph));
         if (isNull(book)) {
             throw new IllegalArgumentException("Incorrect book id");
         }
@@ -53,6 +58,6 @@ public class BookRepositoryJpa implements BookRepository {
 
     private void setBookEntityGraphTo(TypedQuery<Book> query) {
         EntityGraph<?> bookEntityGraph = entityManager.getEntityGraph("book-entity-graph");
-        query.setHint("javax.persistence.fetchgraph", bookEntityGraph);
+        query.setHint(JAVAX_PERSISTENCE_FETCHGRAPH, bookEntityGraph);
     }
 }

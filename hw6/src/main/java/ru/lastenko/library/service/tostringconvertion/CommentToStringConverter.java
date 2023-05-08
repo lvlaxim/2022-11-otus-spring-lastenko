@@ -14,6 +14,6 @@ public class CommentToStringConverter implements ToStringConverter<Comment>{
 
     @Override
     public String convert(Comment comment) {
-        return String.format("ID: %s, комментарий: %s",comment.getId(), comment.getText());
+        return String.format("Комментарий - ID: %s, текст: %s",comment.getId(), comment.getText());
     }
 }

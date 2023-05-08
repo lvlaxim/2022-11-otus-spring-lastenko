@@ -21,7 +21,12 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public List<Comment> getAllFor(Book book) {
-        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c where c.book = :book", Comment.class);
+        TypedQuery<Comment> query = entityManager.createQuery(
+                "select c from Comment c " +
+                        "join fetch c.book b " +
+                        "join fetch b.author " +
+                        "join fetch b.genre " +
+                        "where c.book = :book", Comment.class);
         query.setParameter("book", book);
         return query.getResultList();
     }
