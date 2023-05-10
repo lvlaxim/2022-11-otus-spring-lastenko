@@ -21,13 +21,9 @@ import static org.mockito.Mockito.*;
 class BookServiceImplTest {
 
     @Mock
-    private BookInputService bookInputService;
-    @Mock
     private BookRepository bookRepository;
     @Mock
     private IOService ioService;
-    @Mock
-    private IdentifiableService identifiableService;
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -48,11 +44,9 @@ class BookServiceImplTest {
     @DisplayName("получить новую книгу и сохранить ее")
     void shouldGetAndSaveBook() {
         var book = easyRandom.nextObject(Book.class);
-        when(bookInputService.getBook()).thenReturn(book);
 
-        bookService.getAndSave();
+        bookService.insert(book);
 
-        verify(bookInputService, times(1)).getBook();
         verify(bookRepository, times(1)).insert(book);
     }
 
@@ -87,12 +81,10 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         var originalBook = easyRandom.nextObject(Book.class);
         var bookWithUpdates = easyRandom.nextObject(Book.class);
-        when(bookInputService.getBook()).thenReturn(bookWithUpdates);
         when(bookRepository.update(bookWithUpdates)).thenReturn(bookWithUpdates);
 
-        Book updatedBook = bookService.update(originalBook);
+        Book updatedBook = bookService.update(bookWithUpdates);
 
-        verify(bookInputService, times(1)).getBook();
         verify(bookRepository, times(1)).update(bookWithUpdates);
         assertThat(updatedBook)
                 .isNotNull()
@@ -109,21 +101,4 @@ class BookServiceImplTest {
 
         verify(bookRepository, times(1)).delete(book);
     }
-
-    @Test
-    @DisplayName("получить все книги и выбрать одну из них")
-    void shouldSelectBook() {
-        var books = easyRandom.objects(Book.class, 3).collect(Collectors.toList());
-        when(bookRepository.getAll()).thenReturn(books);
-        Book selectedBook = books.get(0);
-        when(identifiableService.selectByIdFrom(books)).thenReturn(selectedBook);
-
-        Book receivedBook = bookService.selectBook();
-
-        verify(ioService, times(1)).outputString("Выберите книгу из списка:");
-        verify(bookRepository, times(1)).getAll();
-        verify(identifiableService, times(1)).selectByIdFrom(books);
-        assertThat(receivedBook).isEqualTo(selectedBook);
-    }
-
 }

@@ -8,5 +8,4 @@ public interface ToStringConversionHandler {
 
     String convertToString(Collection<?> objects);
 
-    String convertToStringWithSelection(Collection<?> objects, Object selectedObject);
 }

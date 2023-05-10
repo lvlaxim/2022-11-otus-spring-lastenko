@@ -15,9 +15,7 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final CommentInputService commentInputService;
     private final IOService ioService;
-    private final IdentifiableService identifiableService;
 
     @Override
     public List<Comment> getAllFor(Book book) {
@@ -26,9 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment getAndSaveCommentFor(Book book) {
-        Comment comment = commentInputService.getComment();
-        comment.setBook(book);
+    public Comment insert(Comment comment) {
         return commentRepository.insert(comment);
     }
 
@@ -46,10 +42,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment update(Comment comment) {
-        Comment commentWithUpdates = commentInputService.getComment();
-        commentWithUpdates.setId(comment.getId());
-        commentWithUpdates.setBook(comment.getBook());
-        return commentRepository.update(commentWithUpdates);
+        return commentRepository.update(comment);
     }
 
     @Override
@@ -57,13 +50,4 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Comment comment) {
         commentRepository.delete(comment);
     }
-
-    @Override
-    public Comment selectBookComment(Book book) {
-        ioService.outputString("Выберите комментарий из списка:");
-        List<Comment> bookComments = getAllFor(book);
-        return identifiableService.selectByIdFrom(bookComments);
-    }
-
-
 }

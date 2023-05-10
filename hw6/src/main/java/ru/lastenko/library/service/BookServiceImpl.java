@@ -13,10 +13,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
-    private final BookInputService bookInputService;
     private final BookRepository bookRepository;
     private final IOService ioService;
-    private final IdentifiableService identifiableService;
 
     @Override
     public List<Book> getAll() {
@@ -25,8 +23,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Book getAndSave() {
-        Book book = bookInputService.getBook();
+    public Book insert(Book book) {
         return bookRepository.insert(book);
     }
 
@@ -44,9 +41,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book update(Book book) {
-        Book bookWithUpdates = bookInputService.getBook();
-        bookWithUpdates.setId(book.getId());
-        return bookRepository.update(bookWithUpdates);
+        return bookRepository.update(book);
     }
 
     @Override
@@ -55,10 +50,5 @@ public class BookServiceImpl implements BookService {
         bookRepository.delete(book);
     }
 
-    @Override
-    public Book selectBook() {
-        ioService.outputString("Выберите книгу из списка:");
-        List<Book> books = getAll();
-        return identifiableService.selectByIdFrom(books);
-    }
+
 }

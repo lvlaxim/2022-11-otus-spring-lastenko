@@ -8,13 +8,11 @@ public interface BookService {
 
     List<Book> getAll();
 
-    Book getAndSave();
+    Book insert(Book book);
 
     Book getBy(long id);
 
     Book update(Book book);
 
     void delete(Book book);
-
-    Book selectBook();
 }

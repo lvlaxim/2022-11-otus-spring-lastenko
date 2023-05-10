@@ -22,6 +22,7 @@ public class ToStringConversionHandlerImpl implements ToStringConversionHandler 
                 .collect(Collectors.toMap(ToStringConverter::getConvertedClass, it -> it));
     }
 
+    @Override
     public String convertToString(Object object) {
         Class<?> clazz = object.getClass();
         ToStringConverter toStringConverter = getToStringConverterFor(clazz);
@@ -32,17 +33,10 @@ public class ToStringConversionHandlerImpl implements ToStringConversionHandler 
         }
     }
 
+    @Override
     public String convertToString(Collection<?> objects) {
         List<String> convertedObjects = objects.stream()
                 .map(o -> "\t" + convertToString(o))
-                .collect(Collectors.toList());
-        return String.join(System.lineSeparator(), convertedObjects);
-    }
-
-    @Override
-    public String convertToStringWithSelection(Collection<?> objects, Object selectedObject) {
-        List<String> convertedObjects = objects.stream()
-                .map(o -> o.equals(selectedObject) ? " ->\t" + convertToString(o) : "\t" + convertToString(o))
                 .collect(Collectors.toList());
         return String.join(System.lineSeparator(), convertedObjects);
     }

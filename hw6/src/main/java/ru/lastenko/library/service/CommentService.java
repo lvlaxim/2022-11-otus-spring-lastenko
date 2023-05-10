@@ -9,13 +9,11 @@ public interface CommentService {
 
     List<Comment> getAllFor(Book book);
 
-    Comment getAndSaveCommentFor(Book book);
+    Comment insert(Comment comment);
 
     Comment getBy(long id);
 
     Comment update(Comment comment);
 
     void delete(Comment comment);
-
-    Comment selectBookComment(Book book);
 }
