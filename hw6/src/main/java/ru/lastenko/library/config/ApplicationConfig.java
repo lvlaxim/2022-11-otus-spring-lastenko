@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class ApplicationConfig {
 
     @Bean
+    @SuppressWarnings("java:S106")
     public IOService ioService(ToStringConversionHandler toStringConversionHandler) {
         var scanner = new Scanner(System.in);
         return new IOServiceStreams(System.out, scanner, toStringConversionHandler);

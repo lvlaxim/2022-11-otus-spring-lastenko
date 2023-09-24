@@ -11,7 +11,9 @@ import java.util.Scanner;
 public class IOServiceStreams implements IOService {
 
     private final PrintStream output;
+
     private final Scanner input;
+
     private final ToStringConversionHandler toStringConversionHandler;
 
     @Override

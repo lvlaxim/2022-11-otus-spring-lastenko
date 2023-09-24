@@ -15,12 +15,19 @@ import java.util.List;
 public class CommandProcessor {
 
     private final BookService bookService;
+
     private final AuthorService authorService;
+
     private final GenreService genreService;
+
     private final CommentService commentService;
+
     private final BookInputService bookInputService;
+
     private final CommentInputService commentInputService;
+
     private final SelectionService selectionService;
+
     private final ToStringConversionHandler toStringConversionHandler;
 
     public String showAllAuthors() {

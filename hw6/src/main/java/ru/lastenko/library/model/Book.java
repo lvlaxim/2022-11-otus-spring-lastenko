@@ -17,17 +17,20 @@ import java.util.List;
         attributeNodes = {
                 @NamedAttributeNode("author"),
                 @NamedAttributeNode("genre"),
-                @NamedAttributeNode(("comments"))})
+                @NamedAttributeNode("comments")})
 public class Book implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+
     @Column(name = "name")
     private String name;
+
     @ManyToOne()
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private Author author;
+
     @ManyToOne()
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;

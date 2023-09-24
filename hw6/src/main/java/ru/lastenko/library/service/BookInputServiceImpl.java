@@ -13,6 +13,7 @@ import static java.util.Collections.emptyList;
 public class BookInputServiceImpl implements BookInputService {
 
     private final IOService ioService;
+
     private final SelectionService selectionService;
 
     public Book getBook() {

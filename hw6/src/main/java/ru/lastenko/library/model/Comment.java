@@ -16,9 +16,11 @@ public class Comment implements Identifiable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+
     @ManyToOne()
     @JoinColumn(name = "book_id")
     private Book book;
+
     @Column(name = "text")
     private String text;
 }

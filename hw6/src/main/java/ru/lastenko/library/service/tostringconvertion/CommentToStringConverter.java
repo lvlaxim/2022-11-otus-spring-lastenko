@@ -6,7 +6,7 @@ import ru.lastenko.library.model.Comment;
 
 @Service
 @RequiredArgsConstructor
-public class CommentToStringConverter implements ToStringConverter<Comment>{
+public class CommentToStringConverter implements ToStringConverter<Comment> {
     @Override
     public Class<Comment> getConvertedClass() {
         return Comment.class;
@@ -14,6 +14,6 @@ public class CommentToStringConverter implements ToStringConverter<Comment>{
 
     @Override
     public String convert(Comment comment) {
-        return String.format("Комментарий - ID: %s, текст: %s",comment.getId(), comment.getText());
+        return String.format("Комментарий - ID: %s, текст: %s", comment.getId(), comment.getText());
     }
 }

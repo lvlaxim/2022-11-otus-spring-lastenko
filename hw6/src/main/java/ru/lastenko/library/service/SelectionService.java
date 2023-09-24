@@ -14,10 +14,15 @@ import java.util.List;
 public class SelectionService {
 
     private final IOService ioService;
+
     private final IdentifiableService identifiableService;
+
     private final BookService bookService;
+
     private final AuthorService authorService;
+
     private final GenreService genreService;
+
     private final CommentService commentService;
 
     public Book selectBook() {
