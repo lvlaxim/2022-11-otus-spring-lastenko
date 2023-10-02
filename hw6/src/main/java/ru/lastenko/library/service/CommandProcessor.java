@@ -26,7 +26,7 @@ public class CommandProcessor {
 
     private final CommentInputService commentInputService;
 
-    private final SelectionService selectionService;
+    private final LibraryUserSelectionService selectionService;
 
     private final ToStringConversionHandler toStringConversionHandler;
 
@@ -51,14 +51,14 @@ public class CommandProcessor {
     }
 
     public String getBook() {
-        Book selectedBook = selectionService.selectBook();
+        Book selectedBook = selectionService.selectBookFromAll();
         long id = selectedBook.getId();
         Book foundBook = bookService.getBy(id);
         return toStringConversionHandler.convertToString(foundBook);
     }
 
     public String updateBook() {
-        Book selectedBook = selectionService.selectBook();
+        Book selectedBook = selectionService.selectBookFromAll();
         Book bookWithUpdates = bookInputService.getBook();
         bookWithUpdates.setId(selectedBook.getId());
         bookService.update(bookWithUpdates);
@@ -66,19 +66,19 @@ public class CommandProcessor {
     }
 
     public String deleteBook() {
-        Book selectedBook = selectionService.selectBook();
+        Book selectedBook = selectionService.selectBookFromAll();
         bookService.delete(selectedBook);
         return allBooksAsString();
     }
 
     public String getAllCommentsForBook() {
-        Book selectedBook = selectionService.selectBook();
+        Book selectedBook = selectionService.selectBookFromAll();
         List<Comment> comments = commentService.getAllFor(selectedBook);
         return toStringConversionHandler.convertToString(comments);
     }
 
     public String insertNewComment() {
-        Book selectedBook = selectionService.selectBook();
+        Book selectedBook = selectionService.selectBookFromAll();
         Comment comment = commentInputService.getComment();
         comment.setBook(selectedBook);
         commentService.insert(comment);
@@ -86,14 +86,14 @@ public class CommandProcessor {
     }
 
     public String getCommentForBook() {
-        Comment selectedComment = selectionService.selectComment();
+        Comment selectedComment = selectionService.selectBookComment();
         long id = selectedComment.getId();
         Comment foundComment = commentService.getBy(id);
         return toStringConversionHandler.convertToString(foundComment);
     }
 
     public String updateComment() {
-        Comment selectedComment = selectionService.selectComment();
+        Comment selectedComment = selectionService.selectBookComment();
         Comment commentWithUpdates = commentInputService.getComment();
         commentWithUpdates.setId(selectedComment.getId());
         commentWithUpdates.setBook(selectedComment.getBook());
@@ -102,7 +102,7 @@ public class CommandProcessor {
     }
 
     public String deleteComment() {
-        Comment selectedComment = selectionService.selectComment();
+        Comment selectedComment = selectionService.selectBookComment();
         commentService.delete(selectedComment);
         return allBooksAsString();
     }

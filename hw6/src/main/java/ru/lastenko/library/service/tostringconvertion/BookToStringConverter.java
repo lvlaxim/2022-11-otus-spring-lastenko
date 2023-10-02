@@ -23,7 +23,6 @@ public class BookToStringConverter implements ToStringConverter<Book> {
 
     @Override
     public String convert(Book book) {
-
         return String.format("Книга - ID: %s,\tназвание: \"%s\",\tавтор: %s,\tжанр: %s, %s",
                 book.getId(),
                 book.getName(),

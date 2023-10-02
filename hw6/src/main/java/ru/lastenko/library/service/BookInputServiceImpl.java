@@ -14,12 +14,12 @@ public class BookInputServiceImpl implements BookInputService {
 
     private final IOService ioService;
 
-    private final SelectionService selectionService;
+    private final LibraryUserSelectionService libraryUserSelectionService;
 
     public Book getBook() {
         String name = getName();
-        Author author = selectionService.selectAuthor();
-        Genre genre = selectionService.selectGenre();
+        Author author = libraryUserSelectionService.selectAuthorFromAll();
+        Genre genre = libraryUserSelectionService.selectGenreFromAll();
         return new Book(0, name, author, genre, emptyList());
     }
 

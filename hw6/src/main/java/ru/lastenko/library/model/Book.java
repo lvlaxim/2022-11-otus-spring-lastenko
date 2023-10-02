@@ -18,7 +18,7 @@ import java.util.List;
                 @NamedAttributeNode("author"),
                 @NamedAttributeNode("genre"),
                 @NamedAttributeNode("comments")})
-public class Book implements Identifiable {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
