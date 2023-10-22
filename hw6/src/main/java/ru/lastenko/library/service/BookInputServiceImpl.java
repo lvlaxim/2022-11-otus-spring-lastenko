@@ -6,8 +6,6 @@ import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.model.Genre;
 
-import static java.util.Collections.emptyList;
-
 @Service
 @RequiredArgsConstructor
 public class BookInputServiceImpl implements BookInputService {
@@ -20,7 +18,7 @@ public class BookInputServiceImpl implements BookInputService {
         String name = getName();
         Author author = libraryUserSelectionService.selectAuthorFromAll();
         Genre genre = libraryUserSelectionService.selectGenreFromAll();
-        return new Book(0, name, author, genre, emptyList());
+        return new Book(0, name, author, genre);
     }
 
     private String getName() {

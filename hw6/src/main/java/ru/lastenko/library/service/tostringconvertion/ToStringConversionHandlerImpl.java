@@ -14,7 +14,7 @@ import static java.util.Objects.nonNull;
 @Component
 public class ToStringConversionHandlerImpl implements ToStringConversionHandler {
 
-    private Map<Class, ToStringConverter> toStringConverterMap;
+    private final Map<Class, ToStringConverter> toStringConverterMap;
 
     @Autowired
     public ToStringConversionHandlerImpl(List<ToStringConverter> toStringConverters) {

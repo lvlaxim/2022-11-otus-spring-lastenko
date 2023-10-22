@@ -35,7 +35,4 @@ public class Book {
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
 
-    @OneToMany(mappedBy = "book")
-    @EqualsAndHashCode.Exclude
-    private List<Comment> comments;
 }
