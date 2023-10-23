@@ -1,10 +1,8 @@
 package ru.lastenko.library.shell;
 
 import lombok.RequiredArgsConstructor;
-import org.h2.tools.Console;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.lastenko.library.service.CommandProcessor;
 
 import java.sql.SQLException;
 
@@ -12,55 +10,54 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class ShellCommands {
 
-    private final CommandProcessor commandProcessor;
+    private final ShellCommandProcessor commandProcessor;
 
     @ShellMethod(value = "Open DB console.", key = {"dbc"})
     public String openDbConsole() throws SQLException {
-        Console.main();
-        return "Консоль базы данных открыта.";
+        return commandProcessor.openDbConsole();
     }
 
-    @ShellMethod(value = "Show all authors.", key = {"as"})
+    @ShellMethod(value = "Show all authors.", key = {"aa"})
     public String showAllAuthors() {
         return commandProcessor.showAllAuthors();
     }
 
-    @ShellMethod(value = "Show all genres.", key = {"gs"})
+    @ShellMethod(value = "Show all genres.", key = {"ag"})
     public String showAllGenres() {
         return commandProcessor.showAllGenres();
     }
 
-    @ShellMethod(value = "Show all books.", key = {"bs"})
+    @ShellMethod(value = "Show all books.", key = {"ab"})
     public String showAllBooks() {
         return commandProcessor.showAllBooks();
     }
 
-    @ShellMethod(value = "Insert new book.", key = {"i"})
+    @ShellMethod(value = "Insert new book.", key = {"ib"})
     public String insertNewBook() {
         return commandProcessor.insertNewBook();
     }
 
-    @ShellMethod(value = "Show book.", key = {"g"})
+    @ShellMethod(value = "Show book.", key = {"gb"})
     public String showBook() {
         return commandProcessor.getBook();
     }
 
-    @ShellMethod(value = "Update selected book.", key = {"u"})
+    @ShellMethod(value = "Update book.", key = {"ub"})
     public String updateBook() {
         return commandProcessor.updateBook();
     }
 
-    @ShellMethod(value = "Delete selected book.", key = {"d"})
+    @ShellMethod(value = "Delete book.", key = {"db"})
     public String deleteBook() {
         return commandProcessor.deleteBook();
     }
 
-    @ShellMethod(value = "Show all book comments.", key = {"cs"})
+    @ShellMethod(value = "Show all book comments.", key = {"ac"})
     public String showAllCommentsForBook() {
         return commandProcessor.getAllCommentsForBook();
     }
 
-    @ShellMethod(value = "Insert new comment for selected book.", key = {"ic"})
+    @ShellMethod(value = "Insert new comment for book.", key = {"ic"})
     public String insertNewComment() {
         return commandProcessor.insertNewComment();
     }
@@ -70,12 +67,12 @@ public class ShellCommands {
         return commandProcessor.getCommentForBook();
     }
 
-    @ShellMethod(value = "Update selected comment.", key = {"uc"})
+    @ShellMethod(value = "Update comment.", key = {"uc"})
     public String updateComment() {
         return commandProcessor.updateComment();
     }
 
-    @ShellMethod(value = "Delete selected comment.", key = {"dc"})
+    @ShellMethod(value = "Delete comment.", key = {"dc"})
     public String deleteComment() {
         return commandProcessor.deleteComment();
     }
