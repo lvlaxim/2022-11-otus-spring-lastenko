@@ -41,3 +41,17 @@ databaseChangeLog:
         seperator: ';'
         encoding: UTF-8
         tableName: books
+  - changeSet:
+      id: 2023-10-24--populate-comments-table
+      author: lvlaxim
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-10-24--comments.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: comments
