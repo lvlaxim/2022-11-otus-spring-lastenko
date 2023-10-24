@@ -64,7 +64,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("сообщить о несуществующем id при запросе и вернуть null")
+    @DisplayName("сообщить об отсутствии книги с указанным id при запросе и вернуть null")
     void shouldOutputIncorrectIdMessage() {
         long id = 12345L;
         when(bookRepository.getBy(id)).thenThrow(IllegalArgumentException.class);
@@ -72,7 +72,7 @@ class BookServiceImplTest {
         Book receivedBook = bookService.getBy(id);
 
         verify(bookRepository, times(1)).getBy(id);
-        verify(ioService, times(1)).outputString("Введен несущестующий id!");
+        verify(ioService, times(1)).outputString("Книга с введенным id не существует!");
         assertThat(receivedBook).isNull();
     }
 

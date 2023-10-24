@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
         try {
             book = bookRepository.getBy(id);
         } catch (IllegalArgumentException e) {
-            ioService.outputString("Введен несущестующий id!");
+            ioService.outputString("Книга с введенным id не существует!");
         }
         return book;
     }
@@ -51,5 +51,4 @@ public class BookServiceImpl implements BookService {
     public void delete(Book book) {
         bookRepository.delete(book);
     }
-
 }
