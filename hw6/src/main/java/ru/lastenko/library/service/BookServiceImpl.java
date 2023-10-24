@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -18,6 +17,7 @@ public class BookServiceImpl implements BookService {
     private final IOService ioService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAll() {
         return bookRepository.getAll();
     }
@@ -29,6 +29,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book getBy(long id) {
         Book book = null;
         try {

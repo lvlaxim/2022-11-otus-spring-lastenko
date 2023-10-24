@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -19,6 +18,7 @@ public class CommentServiceImpl implements CommentService {
     private final IOService ioService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> getAllFor(Book book) {
         return commentRepository.getAllFor(book);
     }
@@ -30,6 +30,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Comment getBy(long id) {
         Comment comment = null;
         try {
