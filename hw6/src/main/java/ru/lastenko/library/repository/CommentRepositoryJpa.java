@@ -2,6 +2,7 @@ package ru.lastenko.library.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.model.Comment;
 
@@ -13,7 +14,6 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
 import static ru.lastenko.library.model.Book.Fields.author;
 import static ru.lastenko.library.model.Book.Fields.genre;
 import static ru.lastenko.library.model.Comment.Fields.book;
@@ -24,7 +24,7 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     public static final String JAVAX_PERSISTENCE_FETCHGRAPH = "javax.persistence.fetchgraph";
 
-    public static final String INCORRECT_COMMENT_ID = "Incorrect comment id";
+    public static final String INCORRECT_COMMENT_ID_MSG = "Incorrect comment id";
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -48,22 +48,16 @@ public class CommentRepositoryJpa implements CommentRepository {
     @Override
     public Comment getBy(long id) {
         Comment comment = entityManager.find(Comment.class, id);
-        if (isNull(comment)) {
-            throw new IllegalArgumentException(INCORRECT_COMMENT_ID);
-        }
+        Assert.notNull(comment, INCORRECT_COMMENT_ID_MSG);
         return comment;
     }
 
     @Override
     public Comment update(Comment comment) {
-        if (comment.getId() == 0) {
-            throw new IllegalArgumentException(INCORRECT_COMMENT_ID);
-        }
+        Assert.state(comment.getId() > 0, INCORRECT_COMMENT_ID_MSG);
         Comment managedComment = entityManager.find(Comment.class, comment.getId(),
                 Map.of(JAVAX_PERSISTENCE_FETCHGRAPH, getCommentWithBookEntityGraph()));
-        if (isNull(managedComment)) {
-            throw new IllegalArgumentException(INCORRECT_COMMENT_ID);
-        }
+        Assert.notNull(managedComment, INCORRECT_COMMENT_ID_MSG);
         return entityManager.merge(comment);
     }
 

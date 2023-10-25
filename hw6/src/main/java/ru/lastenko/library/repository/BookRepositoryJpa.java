@@ -2,6 +2,7 @@ package ru.lastenko.library.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 import ru.lastenko.library.model.Book;
 
 import javax.persistence.EntityGraph;
@@ -11,7 +12,6 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
 import static ru.lastenko.library.model.Book.Fields.author;
 import static ru.lastenko.library.model.Book.Fields.genre;
 
@@ -21,7 +21,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     public static final String JAVAX_PERSISTENCE_FETCHGRAPH = "javax.persistence.fetchgraph";
 
-    public static final String INCORRECT_BOOK_ID = "Incorrect book id";
+    public static final String INCORRECT_BOOK_ID_MSG = "Incorrect book id";
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -43,17 +43,13 @@ public class BookRepositoryJpa implements BookRepository {
     public Book getBy(long id) {
         Book book = entityManager.find(Book.class, id,
                 Map.of(JAVAX_PERSISTENCE_FETCHGRAPH, getBookEntityGraph()));
-        if (isNull(book)) {
-            throw new IllegalArgumentException(INCORRECT_BOOK_ID);
-        }
+        Assert.notNull(book, INCORRECT_BOOK_ID_MSG);
         return book;
     }
 
     @Override
     public Book update(Book book) {
-        if (book.getId() == 0) {
-            throw new IllegalArgumentException(INCORRECT_BOOK_ID);
-        }
+        Assert.state(book.getId() > 0, INCORRECT_BOOK_ID_MSG);
         getBy(book.getId());
         return entityManager.merge(book);
     }
