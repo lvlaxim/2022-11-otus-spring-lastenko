@@ -29,13 +29,15 @@ public class CommentRepositoryJpa implements CommentRepository {
     @PersistenceContext
     private final EntityManager entityManager;
 
+    private final BookRepository bookRepository;
+
     @Override
     public List<Comment> getAllFor(Book book) {
         TypedQuery<Comment> query = entityManager.createQuery(
                 "select c from Comment c where c.book = :book",
                 Comment.class);
         query.setParameter("book", book);
-        query.setHint(JAVAX_PERSISTENCE_FETCHGRAPH, getCommentWithBookEntityGraph());
+        bookRepository.getBy(book.getId());
         return query.getResultList();
     }
 

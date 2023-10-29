@@ -13,7 +13,7 @@ import static ru.lastenko.library.repository.RepositoryTestUtils.*;
 
 @DisplayName("Репозиторий для работы с комментариями должен")
 @DataJpaTest
-@Import(CommentRepositoryJpa.class)
+@Import({CommentRepositoryJpa.class, BookRepositoryJpa.class})
 class CommentRepositoryJpaTest {
 
     @Autowired
