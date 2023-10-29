@@ -2,7 +2,9 @@ package ru.lastenko.library.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 
 import javax.persistence.Column;
@@ -29,6 +31,8 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Book book;
 
     @Column(name = "text")

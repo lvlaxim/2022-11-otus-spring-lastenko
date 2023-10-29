@@ -3,7 +3,9 @@ package ru.lastenko.library.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
+import ru.lastenko.library.model.Genre;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -50,7 +52,8 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public Book update(Book book) {
         Assert.state(book.getId() > 0, INCORRECT_BOOK_ID_MSG);
-        getBy(book.getId());
+        entityManager.find(Author.class, book.getAuthor().getId());
+        entityManager.find(Genre.class, book.getGenre().getId());
         return entityManager.merge(book);
     }
 
