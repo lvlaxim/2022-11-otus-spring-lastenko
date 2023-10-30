@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.lastenko.library.model.Comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,18 +12,17 @@ import static ru.lastenko.library.repository.RepositoryTestUtils.*;
 
 @DisplayName("Репозиторий для работы с комментариями должен")
 @DataJpaTest
-@Import({CommentRepositoryJpa.class, BookRepositoryJpa.class})
 class CommentRepositoryJpaTest {
 
     @Autowired
-    private CommentRepositoryJpa commentRepositoryJpa;
+    private CommentRepository commentRepository;
     @Autowired
     private TestEntityManager entityManager;
 
     @Test
     @DisplayName("получить все комментарии к книге")
     void shouldGetAllCommentsForBook() {
-        var allCommentsForBook1 = commentRepositoryJpa.getAllFor(BOOK_1);
+        var allCommentsForBook1 = commentRepository.findAllByBook(BOOK_1);
         assertThat(allCommentsForBook1).asList()
                 .hasSize(2)
                 .containsExactlyInAnyOrder(COMMENT_1, COMMENT_2);
@@ -36,7 +34,7 @@ class CommentRepositoryJpaTest {
         var text = "Новый комментарий";
         var newComment = new Comment(0, BOOK_2, text);
 
-        var savedComment = commentRepositoryJpa.insert(newComment);
+        var savedComment = commentRepository.save(newComment);
 
         var foundComment = entityManager.find(Comment.class, 100L);
         var expectedComment = new Comment(100, BOOK_2, text);
@@ -51,7 +49,7 @@ class CommentRepositoryJpaTest {
     void shouldGetCommentById() {
         var id = COMMENT_1.getId();
 
-        var receivedComment = commentRepositoryJpa.getBy(id);
+        var receivedComment = commentRepository.findById(id).get();
 
         assertThat(receivedComment)
                 .isNotNull()
@@ -64,7 +62,7 @@ class CommentRepositoryJpaTest {
         var commentId = COMMENT_1.getId();
         var commentWithUpdates = new Comment(commentId, BOOK_3, "Обновленный комментарий");
 
-        var updatedComment = commentRepositoryJpa.update(commentWithUpdates);
+        var updatedComment = commentRepository.save(commentWithUpdates);
 
         var foundComment = entityManager.find(Comment.class, commentId);
         assertThat(foundComment)
@@ -77,7 +75,7 @@ class CommentRepositoryJpaTest {
     @Test
     @DisplayName("удалить комментарий из БД")
     void shouldDeleteComment() {
-        commentRepositoryJpa.delete(COMMENT_1);
+        commentRepository.delete(COMMENT_1);
         Comment comment = entityManager.find(Comment.class, COMMENT_1.getId());
         assertThat(comment).isNull();
     }

@@ -8,11 +8,9 @@ public interface BookService {
 
     List<Book> getAll();
 
-    Book insert(Book book);
+    Book save(Book book);
 
     Book getBy(long id);
-
-    Book update(Book book);
 
     void delete(Book book);
 }

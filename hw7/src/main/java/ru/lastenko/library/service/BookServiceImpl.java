@@ -19,31 +19,20 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public List<Book> getAll() {
-        return bookRepository.getAll();
+        return bookRepository.findAll();
     }
 
     @Override
     @Transactional
-    public Book insert(Book book) {
-        return bookRepository.insert(book);
+    public Book save(Book book) {
+        return bookRepository.save(book);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Book getBy(long id) {
-        Book book = null;
-        try {
-            book = bookRepository.getBy(id);
-        } catch (IllegalArgumentException e) {
-            ioService.outputString("Книга с введенным id не существует!");
-        }
-        return book;
-    }
-
-    @Override
-    @Transactional
-    public Book update(Book book) {
-        return bookRepository.update(book);
+        return bookRepository.findById(id)
+                .orElseThrow();
     }
 
     @Override

@@ -62,22 +62,24 @@ public class ShellCommandProcessor {
 
     public String insertNewBook() {
         Book book = bookInputService.getBook();
-        bookService.insert(book);
+        bookService.save(book);
         return getAllBooksAsString();
     }
 
     public String getBook() {
         Book selectedBook = selectionService.selectBookFromAll();
-        long id = selectedBook.getId();
-        Book foundBook = bookService.getBy(id);
+        long bookId = selectedBook.getId();
+        Book foundBook = bookService.getBy(bookId);
         return getBookWithAllCommentsAsString(foundBook);
     }
 
     public String updateBook() {
         Book selectedBook = selectionService.selectBookFromAll();
         Book enteredBook = bookInputService.getBook();
-        enteredBook.setId(selectedBook.getId());
-        Book updatedBook = bookService.update(enteredBook);
+        long bookId = selectedBook.getId();
+        enteredBook.setId(bookId);
+        bookService.save(enteredBook);
+        Book updatedBook = bookService.getBy(bookId);
         return toStringConversionHandler.convertToString(updatedBook);
     }
 
@@ -96,14 +98,14 @@ public class ShellCommandProcessor {
         Book selectedBook = selectionService.selectBookFromAll();
         Comment comment = commentInputService.getComment();
         comment.setBook(selectedBook);
-        Comment insertedComment = commentService.insert(comment);
+        Comment insertedComment = commentService.save(comment);
         return getBookWithAllCommentsAsString(insertedComment.getBook());
     }
 
     public String getCommentForBook() {
         Comment selectedComment = selectionService.selectBookComment();
-        long id = selectedComment.getId();
-        Comment foundComment = commentService.getBy(id);
+        long commentId = selectedComment.getId();
+        Comment foundComment = commentService.getBy(commentId);
         return toStringConversionHandler.convertToString(foundComment);
     }
 
@@ -111,14 +113,16 @@ public class ShellCommandProcessor {
         Comment selectedComment = selectionService.selectBookComment();
         Comment enteredComment = commentInputService.getComment();
         selectedComment.setText(enteredComment.getText());
-        Comment updatedComment = commentService.update(selectedComment);
-        return getBookWithAllCommentsAsString(updatedComment.getBook());
+        Comment updatedComment = commentService.save(selectedComment);
+        Book book = bookService.getBy(updatedComment.getBook().getId());
+        return getBookWithAllCommentsAsString(book);
     }
 
     public String deleteComment() {
         Comment selectedComment = selectionService.selectBookComment();
         commentService.delete(selectedComment);
-        return getBookWithAllCommentsAsString(selectedComment.getBook());
+        Book book = bookService.getBy(selectedComment.getBook().getId());
+        return getBookWithAllCommentsAsString(book);
     }
 
     private String getAllBooksAsString() {

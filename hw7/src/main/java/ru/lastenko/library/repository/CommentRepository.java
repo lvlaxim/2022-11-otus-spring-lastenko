@@ -1,20 +1,12 @@
 package ru.lastenko.library.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.model.Comment;
 
 import java.util.List;
 
-public interface CommentRepository {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> getAllFor(Book book);
-
-    Comment insert(Comment comment);
-
-    Comment getBy(long id);
-
-    Comment update(Comment comment);
-
-    void delete(Comment comment);
-
+    List<Comment> findAllByBook(Book book);
 }

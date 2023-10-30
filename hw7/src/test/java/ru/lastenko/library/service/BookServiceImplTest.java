@@ -11,9 +11,12 @@ import ru.lastenko.library.model.Book;
 import ru.lastenko.library.repository.BookRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис для работы с книгами должен")
@@ -33,7 +36,7 @@ class BookServiceImplTest {
     @DisplayName("вернуть все книги")
     void shouldGetAllBooks() {
         var books = easyRandom.objects(Book.class, 3).collect(Collectors.toList());
-        when(bookRepository.getAll()).thenReturn(books);
+        when(bookRepository.findAll()).thenReturn(books);
 
         List<Book> actualBooks = bookService.getAll();
 
@@ -45,9 +48,9 @@ class BookServiceImplTest {
     void shouldGetAndSaveBook() {
         var book = easyRandom.nextObject(Book.class);
 
-        bookService.insert(book);
+        bookService.save(book);
 
-        verify(bookRepository, times(1)).insert(book);
+        verify(bookRepository, times(1)).save(book);
     }
 
     @Test
@@ -55,25 +58,23 @@ class BookServiceImplTest {
     void shouldGetBookById() {
         var book = easyRandom.nextObject(Book.class);
         long id = book.getId();
-        when(bookRepository.getBy(id)).thenReturn(book);
+        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 
         Book receivedBook = bookService.getBy(id);
 
-        verify(bookRepository, times(1)).getBy(id);
+        verify(bookRepository, times(1)).findById(id);
         assertThat(receivedBook).isEqualTo(book);
     }
 
     @Test
-    @DisplayName("сообщить об отсутствии книги с указанным id при запросе и вернуть null")
-    void shouldOutputIncorrectIdMessage() {
+    @DisplayName("выкину NoSuchElementException")
+    void shouldThrowNoSuchElementException() {
         long id = 12345L;
-        when(bookRepository.getBy(id)).thenThrow(IllegalArgumentException.class);
+        when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-        Book receivedBook = bookService.getBy(id);
+        assertThatThrownBy(() -> bookService.getBy(id)).isExactlyInstanceOf(NoSuchElementException.class);
 
-        verify(bookRepository, times(1)).getBy(id);
-        verify(ioService, times(1)).outputString("Книга с введенным id не существует!");
-        assertThat(receivedBook).isNull();
+        verify(bookRepository, times(1)).findById(id);
     }
 
     @Test
@@ -81,11 +82,11 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         var originalBook = easyRandom.nextObject(Book.class);
         var bookWithUpdates = easyRandom.nextObject(Book.class);
-        when(bookRepository.update(bookWithUpdates)).thenReturn(bookWithUpdates);
+        when(bookRepository.save(bookWithUpdates)).thenReturn(bookWithUpdates);
 
-        Book updatedBook = bookService.update(bookWithUpdates);
+        Book updatedBook = bookService.save(bookWithUpdates);
 
-        verify(bookRepository, times(1)).update(bookWithUpdates);
+        verify(bookRepository, times(1)).save(bookWithUpdates);
         assertThat(updatedBook)
                 .isNotNull()
                 .isEqualTo(bookWithUpdates)

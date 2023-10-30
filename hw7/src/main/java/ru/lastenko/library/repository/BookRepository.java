@@ -1,19 +1,22 @@
 package ru.lastenko.library.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.lastenko.library.model.Book;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface BookRepository {
+import static ru.lastenko.library.model.Book.Fields.author;
+import static ru.lastenko.library.model.Book.Fields.genre;
 
-    List<Book> getAll();
+public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Book insert(Book book);
+    @Override
+    @EntityGraph(attributePaths = {author, genre})
+    List<Book> findAll();
 
-    Book getBy(long id);
-
-    Book update(Book book);
-
-    void delete(Book book);
-
+    @Override
+    @EntityGraph(attributePaths = {author, genre})
+    Optional<Book> findById(Long id);
 }

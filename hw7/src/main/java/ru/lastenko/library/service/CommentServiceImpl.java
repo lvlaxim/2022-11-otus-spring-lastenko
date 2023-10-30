@@ -15,36 +15,23 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final IOService ioService;
-
     @Override
     @Transactional(readOnly = true)
     public List<Comment> getAllFor(Book book) {
-        return commentRepository.getAllFor(book);
+        return commentRepository.findAllByBook(book);
     }
 
     @Override
     @Transactional
-    public Comment insert(Comment comment) {
-        return commentRepository.insert(comment);
+    public Comment save(Comment comment) {
+        return commentRepository.save(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Comment getBy(long id) {
-        Comment comment = null;
-        try {
-            comment = commentRepository.getBy(id);
-        } catch (IllegalArgumentException e) {
-            ioService.outputString("Введен несущестующий id!");
-        }
-        return comment;
-    }
-
-    @Override
-    @Transactional
-    public Comment update(Comment comment) {
-        return commentRepository.update(comment);
+        return commentRepository.findById(id)
+                .orElseThrow();
     }
 
     @Override

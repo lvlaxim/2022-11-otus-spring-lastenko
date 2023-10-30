@@ -1,9 +1,7 @@
 package ru.lastenko.library.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.lastenko.library.model.Genre;
 
-import java.util.List;
-
-public interface GenreRepository {
-    List<Genre> getAll();
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 }
