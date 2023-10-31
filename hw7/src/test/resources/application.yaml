@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:librarydb
+  shell:
+    interactive:
+      enabled: false
+  liquibase:
+    contexts: test
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+    properties:
+      hibernate:
+      format_sql: true
