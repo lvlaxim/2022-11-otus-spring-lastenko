@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Comment getBy(long id) {
+    public Comment getBy(String id) {
         return commentRepository.findById(id)
                 .orElseThrow();
     }

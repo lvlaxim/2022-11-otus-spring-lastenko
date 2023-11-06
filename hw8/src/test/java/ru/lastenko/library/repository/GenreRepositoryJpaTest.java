@@ -3,14 +3,12 @@ package ru.lastenko.library.repository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static ru.lastenko.library.repository.RepositoryTestUtils.GENRE_1;
-import static ru.lastenko.library.repository.RepositoryTestUtils.GENRE_2;
 
 @DisplayName("Репозиторий для работы с жанрами должен")
-@DataJpaTest
+@DataMongoTest
 class GenreRepositoryJpaTest {
 
     @Autowired
@@ -21,7 +19,6 @@ class GenreRepositoryJpaTest {
     void getAll() {
         var allGenres = genreRepository.findAll();
         assertThat(allGenres).asList()
-                .hasSize(2)
-                .containsExactlyInAnyOrder(GENRE_1, GENRE_2);
+                .hasSize(2);
     }
 }

@@ -1,5 +1,0 @@
-databaseChangeLog:
-  - includeAll:
-      path: db/changelog/datadefinition
-  - includeAll:
-      path: db/changelog/data

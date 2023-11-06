@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.repository.BookRepository;
+import ru.lastenko.library.repository.CommentRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,6 +26,8 @@ class BookServiceImplTest {
 
     @Mock
     private BookRepository bookRepository;
+    @Mock
+    private CommentRepository commentRepository;
     @Mock
     private IOService ioService;
     @InjectMocks
@@ -57,7 +60,7 @@ class BookServiceImplTest {
     @DisplayName("получить книгу по ее id")
     void shouldGetBookById() {
         var book = easyRandom.nextObject(Book.class);
-        long id = book.getId();
+        String id = book.getId();
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 
         Book receivedBook = bookService.getBy(id);
@@ -69,7 +72,7 @@ class BookServiceImplTest {
     @Test
     @DisplayName("выкину NoSuchElementException")
     void shouldThrowNoSuchElementException() {
-        long id = 12345L;
+        String id = "12345L";
         when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> bookService.getBy(id)).isExactlyInstanceOf(NoSuchElementException.class);
@@ -94,12 +97,13 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("удалить книгу")
+    @DisplayName("удалить книгу и все комментарии о ней")
     void shouldDeleteBook() {
         var book = easyRandom.nextObject(Book.class);
 
         bookService.delete(book);
 
         verify(bookRepository, times(1)).delete(book);
+        verify(commentRepository, times(1)).deleteAllByBook(book);
     }
 }

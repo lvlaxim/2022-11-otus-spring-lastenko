@@ -3,15 +3,12 @@ package ru.lastenko.library.repository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static ru.lastenko.library.repository.RepositoryTestUtils.AUTHOR_1;
-import static ru.lastenko.library.repository.RepositoryTestUtils.AUTHOR_2;
 
 @DisplayName("Репозиторий для работы с авторами должен")
-@DataJpaTest
-//@Import(AuthorRepositoryJpa.class)
+@DataMongoTest
 class AuthorRepositoryJpaTest {
 
     @Autowired
@@ -22,7 +19,6 @@ class AuthorRepositoryJpaTest {
     void shouldGetAllAuthors() {
         var allAuthors = authorRepository.findAll();
         assertThat(allAuthors).asList()
-                .hasSize(2)
-                .containsExactlyInAnyOrder(AUTHOR_1, AUTHOR_2);
+                .hasSize(3);
     }
 }

@@ -10,7 +10,7 @@ import ru.lastenko.library.model.Genre;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.ToLongFunction;
+import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
@@ -51,21 +51,14 @@ public class LibraryUserSelectionService {
         return letUserSelectById(comments, Comment::getId);
     }
 
-    private <T> T letUserSelectById(Collection<T> models, ToLongFunction<T> idExtractor) {
+    private <T> T letUserSelectById(Collection<T> models, Function<T, String> idExtractor) {
         ioService.output(models);
         Optional<T> model = Optional.empty();
         while (model.isEmpty()) {
             ioService.outputString("введите id-номер из списка выше");
-            String idAsStr = ioService.readString();
-            Long id;
-            try {
-                id = Long.parseLong(idAsStr);
-            } catch (NumberFormatException e) {
-                ioService.outputString("некорректный id-номер");
-                continue;
-            }
+            String id = ioService.readString();
             model = models.stream()
-                    .filter(m -> id.equals(idExtractor.applyAsLong(m)))
+                    .filter(m -> id.equals(idExtractor.apply(m)))
                     .findFirst();
         }
         return model.get();

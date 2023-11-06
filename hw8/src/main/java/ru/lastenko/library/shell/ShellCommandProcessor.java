@@ -1,7 +1,6 @@
 package ru.lastenko.library.shell;
 
 import lombok.RequiredArgsConstructor;
-import org.h2.tools.Console;
 import org.springframework.stereotype.Component;
 import ru.lastenko.library.model.Author;
 import ru.lastenko.library.model.Book;
@@ -16,7 +15,6 @@ import ru.lastenko.library.service.GenreService;
 import ru.lastenko.library.service.LibraryUserSelectionService;
 import ru.lastenko.library.service.tostringconvertion.ToStringConversionHandler;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
@@ -41,10 +39,6 @@ public class ShellCommandProcessor {
 
     private final ToStringConversionHandler toStringConversionHandler;
 
-    public String openDbConsole() throws SQLException {
-        Console.main();
-        return "Консоль базы данных открыта.";
-    }
 
     public String showAllAuthors() {
         List<Author> authors = authorService.getAll();
@@ -68,7 +62,7 @@ public class ShellCommandProcessor {
 
     public String getBook() {
         Book selectedBook = selectionService.selectBookFromAll();
-        long bookId = selectedBook.getId();
+        String bookId = selectedBook.getId();
         Book foundBook = bookService.getBy(bookId);
         return getBookWithAllCommentsAsString(foundBook);
     }
@@ -76,7 +70,7 @@ public class ShellCommandProcessor {
     public String updateBook() {
         Book selectedBook = selectionService.selectBookFromAll();
         Book enteredBook = bookInputService.getBook();
-        long bookId = selectedBook.getId();
+        String bookId = selectedBook.getId();
         enteredBook.setId(bookId);
         bookService.save(enteredBook);
         Book updatedBook = bookService.getBy(bookId);
@@ -104,7 +98,7 @@ public class ShellCommandProcessor {
 
     public String getCommentForBook() {
         Comment selectedComment = selectionService.selectBookComment();
-        long commentId = selectedComment.getId();
+        String commentId = selectedComment.getId();
         Comment foundComment = commentService.getBy(commentId);
         return toStringConversionHandler.convertToString(foundComment);
     }

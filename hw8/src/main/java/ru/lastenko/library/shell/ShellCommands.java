@@ -4,18 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-import java.sql.SQLException;
-
 @ShellComponent
 @RequiredArgsConstructor
 public class ShellCommands {
 
     private final ShellCommandProcessor commandProcessor;
 
-    @ShellMethod(value = "Open DB console.", key = {"dbc"})
-    public String openDbConsole() throws SQLException {
-        return commandProcessor.openDbConsole();
-    }
 
     @ShellMethod(value = "Show all authors.", key = {"aa"})
     public String showAllAuthors() {

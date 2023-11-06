@@ -18,7 +18,7 @@ public class BookInputServiceImpl implements BookInputService {
         String name = getName();
         Author author = libraryUserSelectionService.selectAuthorFromAll();
         Genre genre = libraryUserSelectionService.selectGenreFromAll();
-        return new Book(0, name, author, genre);
+        return new Book(null, name, author, genre);
     }
 
     private String getName() {

@@ -12,7 +12,7 @@ public class CommentInputServiceImpl implements CommentInputService {
 
     @Override
     public Comment getComment() {
-        return new Comment(0, null, getText());
+        return new Comment(null, null, getText());
     }
 
     private String getText() {

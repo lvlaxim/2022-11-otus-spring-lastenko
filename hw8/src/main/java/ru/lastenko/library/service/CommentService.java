@@ -11,7 +11,7 @@ public interface CommentService {
 
     Comment save(Comment comment);
 
-    Comment getBy(long id);
+    Comment getBy(String id);
 
     void delete(Comment comment);
 }

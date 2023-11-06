@@ -10,7 +10,7 @@ public interface BookService {
 
     Book save(Book book);
 
-    Book getBy(long id);
+    Book getBy(String id);
 
     void delete(Book book);
 }
