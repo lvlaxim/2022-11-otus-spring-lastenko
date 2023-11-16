@@ -2,6 +2,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:librarydb
   jpa:
+    open-in-view: false
     generate-ddl: false
     hibernate:
       ddl-auto: none

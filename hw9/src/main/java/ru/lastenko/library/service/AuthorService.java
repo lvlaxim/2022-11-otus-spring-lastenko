@@ -1,9 +1,9 @@
 package ru.lastenko.library.service;
 
-import ru.lastenko.library.model.Author;
+import ru.lastenko.library.dto.AuthorDto;
 
 import java.util.List;
 
 public interface AuthorService {
-    List<Author> getAll();
+    List<AuthorDto> getAll();
 }

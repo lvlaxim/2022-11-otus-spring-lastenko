@@ -7,16 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.lastenko.library.dto.BookDto;
+import ru.lastenko.library.mapper.BookMapper;
 import ru.lastenko.library.model.Book;
 import ru.lastenko.library.repository.BookRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Сервис для работы с книгами должен")
@@ -26,7 +26,7 @@ class BookServiceImplTest {
     @Mock
     private BookRepository bookRepository;
     @Mock
-    private IOService ioService;
+    private BookMapper bookMapper;
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -35,22 +35,33 @@ class BookServiceImplTest {
     @Test
     @DisplayName("вернуть все книги")
     void shouldGetAllBooks() {
-        var books = easyRandom.objects(Book.class, 3).collect(Collectors.toList());
+        int booksCount = 3;
+        var books = easyRandom.objects(Book.class, booksCount).toList();
         when(bookRepository.findAll()).thenReturn(books);
 
-        List<Book> actualBooks = bookService.getAll();
+        var actualBooks = bookService.getAll();
 
-        assertThat(actualBooks).containsExactlyInAnyOrderElementsOf(books);
+        verify(bookRepository, times(1)).findAll();
+        verify(bookMapper, times(booksCount)).mapToDto(any(Book.class));
     }
 
     @Test
-    @DisplayName("получить новую книгу и сохранить ее")
-    void shouldGetAndSaveBook() {
-        var book = easyRandom.nextObject(Book.class);
+    @DisplayName("сохранить книгу")
+    void shouldSaveBook() {
+        var bookDto = new BookDto();
+        var book = new Book();
+        when(bookMapper.mapFromDto(bookDto)).thenReturn(book);
+        var savedBook = new Book();
+        when(bookRepository.save(book)).thenReturn(savedBook);
+        var savedBookDto = new BookDto();
+        when(bookMapper.mapToDto(savedBook)).thenReturn(savedBookDto);
 
-        bookService.save(book);
+        var resultBook = bookService.save(bookDto);
 
+        verify(bookMapper, times(1)).mapFromDto(bookDto);
         verify(bookRepository, times(1)).save(book);
+        verify(bookMapper, times(1)).mapToDto(savedBook);
+        assertEquals(savedBookDto, resultBook);
     }
 
     @Test
@@ -59,11 +70,14 @@ class BookServiceImplTest {
         var book = easyRandom.nextObject(Book.class);
         long id = book.getId();
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
+        var bookDto = new BookDto();
+        when(bookMapper.mapToDto(book)).thenReturn(bookDto);
 
-        Book receivedBook = bookService.getBy(id);
+        var resultBookDto = bookService.getBy(id);
 
         verify(bookRepository, times(1)).findById(id);
-        assertThat(receivedBook).isEqualTo(book);
+        verify(bookMapper, times(1)).mapToDto(book);
+        assertEquals(bookDto, resultBookDto);
     }
 
     @Test
@@ -78,28 +92,13 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("получить книгу с изменениями и обновить ею оригинальную")
-    void shouldUpdateBook() {
-        var originalBook = easyRandom.nextObject(Book.class);
-        var bookWithUpdates = easyRandom.nextObject(Book.class);
-        when(bookRepository.save(bookWithUpdates)).thenReturn(bookWithUpdates);
-
-        Book updatedBook = bookService.save(bookWithUpdates);
-
-        verify(bookRepository, times(1)).save(bookWithUpdates);
-        assertThat(updatedBook)
-                .isNotNull()
-                .isEqualTo(bookWithUpdates)
-                .isNotEqualTo(originalBook);
-    }
-
-    @Test
     @DisplayName("удалить книгу")
     void shouldDeleteBook() {
         var book = easyRandom.nextObject(Book.class);
+        long id = book.getId();
 
-        bookService.delete(book);
+        bookService.deleteBy(id);
 
-        verify(bookRepository, times(1)).delete(book);
+        verify(bookRepository, times(1)).deleteById(id);
     }
 }

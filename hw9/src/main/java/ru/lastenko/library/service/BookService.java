@@ -1,16 +1,16 @@
 package ru.lastenko.library.service;
 
-import ru.lastenko.library.model.Book;
+import ru.lastenko.library.dto.BookDto;
 
 import java.util.List;
 
 public interface BookService {
 
-    List<Book> getAll();
+    List<BookDto> getAll();
 
-    Book save(Book book);
+    BookDto save(BookDto book);
 
-    Book getBy(long id);
+    BookDto getBy(long id);
 
-    void delete(Book book);
+    void deleteBy(long id);
 }
