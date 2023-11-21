@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.lastenko.library.dto.AuthorDto;
@@ -26,14 +27,14 @@ public class BookController {
 
     private final GenreService genreService;
 
-    @GetMapping("/")
+    @GetMapping("/book")
     public String booksList(Model model) {
         List<BookDto> books = bookService.getAll();
         model.addAttribute("books", books);
         return "bookList";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/book/new")
     public String addBook(Model model) {
         BookDto book = new BookDto();
         List<AuthorDto> authors = authorService.getAll();
@@ -44,8 +45,8 @@ public class BookController {
         return "editBook";
     }
 
-    @GetMapping("/edit")
-    public String editBook(@RequestParam("id") long id, Model model) {
+    @GetMapping("/book/{id}")
+    public String editBook(@PathVariable("id") long id, Model model) {
         BookDto book = bookService.getBy(id);
         List<AuthorDto> authors = authorService.getAll();
         List<GenreDto> genres = genreService.getAll();
@@ -55,16 +56,16 @@ public class BookController {
         return "editBook";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/book")
     public String saveBook(@ModelAttribute BookDto bookDto) {
         bookService.save(bookDto);
-        return "redirect:/";
+        return "redirect:/book";
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/book/delete")
     public String deleteBook(@RequestParam("id") long id) {
         bookService.deleteBy(id);
-        return "redirect:/";
+        return "redirect:/book";
     }
 
 }

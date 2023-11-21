@@ -48,7 +48,7 @@ class BookControllerTest {
         var books = easyRandom.objects(BookDto.class, 3).toList();
         when(bookService.getAll()).thenReturn(books);
 
-        mvc.perform(get("/"))
+        mvc.perform(get("/book"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("books", books))
                 .andExpect(view().name("bookList"));
@@ -63,7 +63,7 @@ class BookControllerTest {
         var authors = easyRandom.objects(AuthorDto.class, 3).toList();
         when(authorService.getAll()).thenReturn(authors);
 
-        mvc.perform(get("/add"))
+        mvc.perform(get("/book/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("book", new BookDto()))
                 .andExpect(model().attribute("genres", genres))
@@ -81,7 +81,7 @@ class BookControllerTest {
         var authors = easyRandom.objects(AuthorDto.class, 3).toList();
         when(authorService.getAll()).thenReturn(authors);
 
-        mvc.perform(get("/edit").param("id", String.valueOf(book.getId())))
+        mvc.perform(get("/book/{id}", String.valueOf(book.getId())))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("book", book))
                 .andExpect(model().attribute("genres", genres))
@@ -93,22 +93,22 @@ class BookControllerTest {
     @DisplayName("POST-запрос: вызвать метод сохраняющий полученную книгу, сделать редирект на список книг")
     void shouldSaveBook() throws Exception {
         var bookDto = new BookDto();
-        mvc.perform(post("/edit")
+        mvc.perform(post("/book")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(bookDto)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlTemplate("/"));
+                .andExpect(redirectedUrlTemplate("/book"));
 
         verify(bookService, times(1)).save(bookDto);
     }
 
     @Test
-    @DisplayName("GET-запрос: вызвать метод удаляющий книгу по полученному id, сделать редирект на список книг")
+    @DisplayName("POST-запрос: вызвать метод удаляющий книгу по полученному id, сделать редирект на список книг")
     void shouldDeleteBook() throws Exception {
         long id = 777;
-        mvc.perform(get("/delete").param("id", String.valueOf(id)))
+        mvc.perform(post("/book/delete").param("id", String.valueOf(id)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlTemplate("/"));
+                .andExpect(redirectedUrlTemplate("/book"));
 
         verify(bookService, times(1)).deleteBy(id);
     }

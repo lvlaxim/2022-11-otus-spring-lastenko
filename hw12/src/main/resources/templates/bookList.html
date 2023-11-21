@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Список книг</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px; /* Расстояние между кнопками */
+        }
+
+        .action-button {
+            padding: 5px 10px;
+            cursor: pointer;
+            text-decoration: none;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body>
-<a href="editBook.html" th:href="@{/add}">Добавить новую книгу</a>
+<a href="editBook.html" th:href="@{/book/new}">Добавить новую книгу</a>
 <h3>Книги:</h3>
 <table>
     <thead>
@@ -21,9 +48,13 @@
         <td th:text="${book.name}">Здесь должно быть название книги</td>
         <td th:text="${book.genre.name}">Здесь должен быть жанр книги</td>
         <td th:text="${book.author.fullName}">Здесь должен быть автор книги</td>
-        <td>
-            <a href="editBook.html" th:href="@{/edit(id=${book.id})}">Изменить</a>
-            <a href="" th:href="@{/delete(id=${book.id})}">Удалить</a>
+        <td class="action-buttons">
+            <!-- Кнопка "Изменить" -->
+            <a th:href="@{/book/{id}(id=${book.id})}" class="action-button">Изменить</a>
+            <!-- Форма для кнопки "Удалить" -->
+            <form method="post" th:action="@{/book/delete(id=${book.id})}">
+                <button type="submit" class="action-button">Удалить</button>
+            </form>
         </td>
     </tr>
     </tbody>
