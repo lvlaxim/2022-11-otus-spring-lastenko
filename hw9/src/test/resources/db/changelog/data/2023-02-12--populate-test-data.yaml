@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-02-12--populate-authors-table
+      author: lvlaxim
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-02-12--authors.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: authors
+  - changeSet:
+      id: 2023-02-12--populate-genres-table
+      author: lvlaxim
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-02-12--genres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: genres
+  - changeSet:
+      id: 2023-02-12--populate-books-table
+      author: lvlaxim
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-02-12--books.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: books
+  - changeSet:
+      id: 2023-10-24--populate-comments-table
+      author: lvlaxim
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-10-24--comments.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: comments
