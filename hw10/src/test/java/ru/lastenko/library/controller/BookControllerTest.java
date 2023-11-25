@@ -9,17 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.lastenko.library.dto.AuthorDto;
 import ru.lastenko.library.dto.BookDto;
-import ru.lastenko.library.dto.GenreDto;
-import ru.lastenko.library.service.AuthorService;
 import ru.lastenko.library.service.BookService;
-import ru.lastenko.library.service.GenreService;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Контроллер для работы с книгами должен обработать")
 @WebMvcTest(BookController.class)
@@ -34,81 +30,58 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    @MockBean
-    private AuthorService authorService;
-
-    @MockBean
-    private GenreService genreService;
-
     private final EasyRandom easyRandom = new EasyRandom();
 
     @Test
-    @DisplayName("GET-запрос: вернуть имя html-вью \"bookList\" и модель наполненную книгами")
-    void shouldReturnBookListViewWithBooks() throws Exception {
+    @DisplayName("GET-запрос: вернуть все книги")
+    void shouldGetAllBooks() throws Exception {
         var books = easyRandom.objects(BookDto.class, 3).toList();
         when(bookService.getAll()).thenReturn(books);
 
-        mvc.perform(get("/"))
+        mvc.perform(get("/api/book"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("books", books))
-                .andExpect(view().name("bookList"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(mapper.writeValueAsString(books)));
 
+        verify(bookService, times(1)).getAll();
     }
 
     @Test
-    @DisplayName("GET-запрос: вернуть имя html-вью \"editBook\" и модель наполненную новой книгой, жанрами и авторами")
-    void shouldReturnEditBookViewWithNewBookAndGenresAndAuthors() throws Exception {
-        var genres = easyRandom.objects(GenreDto.class, 3).toList();
-        when(genreService.getAll()).thenReturn(genres);
-        var authors = easyRandom.objects(AuthorDto.class, 3).toList();
-        when(authorService.getAll()).thenReturn(authors);
+    @DisplayName("GET-запрос: вернуть книгу по id")
+    void shouldGetBookById() throws Exception {
+        BookDto book = easyRandom.nextObject(BookDto.class);
+        long id = book.getId();
+        when(bookService.getBy(id)).thenReturn(book);
 
-        mvc.perform(get("/add"))
+        mvc.perform(get("/api/book/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("book", new BookDto()))
-                .andExpect(model().attribute("genres", genres))
-                .andExpect(model().attribute("authors", authors))
-                .andExpect(view().name("editBook"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(mapper.writeValueAsString(book)));
+
+        verify(bookService, times(1)).getBy(id);
     }
 
     @Test
-    @DisplayName("GET-запрос: вернуть имя html-вью \"editBook\" и модель наполненную книгой, жанрами и авторами")
-    void shouldReturnEditBookViewWithBookAndGenresAndAuthors() throws Exception {
-        var book = easyRandom.nextObject(BookDto.class);
-        when(bookService.getBy(book.getId())).thenReturn(book);
-        var genres = easyRandom.objects(GenreDto.class, 3).toList();
-        when(genreService.getAll()).thenReturn(genres);
-        var authors = easyRandom.objects(AuthorDto.class, 3).toList();
-        when(authorService.getAll()).thenReturn(authors);
-
-        mvc.perform(get("/edit").param("id", String.valueOf(book.getId())))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("book", book))
-                .andExpect(model().attribute("genres", genres))
-                .andExpect(model().attribute("authors", authors))
-                .andExpect(view().name("editBook"));
-    }
-
-    @Test
-    @DisplayName("POST-запрос: вызвать метод сохраняющий полученную книгу, сделать редирект на список книг")
+    @DisplayName("POST-запрос: сохранить полученную книгу")
     void shouldSaveBook() throws Exception {
-        var bookDto = new BookDto();
-        mvc.perform(post("/edit")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(bookDto)))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlTemplate("/"));
+        BookDto book = easyRandom.nextObject(BookDto.class);
+        when(bookService.save(book)).thenReturn(book);
 
-        verify(bookService, times(1)).save(bookDto);
+        mvc.perform(post("/api/book")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(book)))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(mapper.writeValueAsString(book)));
+
+        verify(bookService, times(1)).save(book);
     }
 
     @Test
-    @DisplayName("GET-запрос: вызвать метод удаляющий книгу по полученному id, сделать редирект на список книг")
+    @DisplayName("DELETE-запрос: удалить книгу по полученному id")
     void shouldDeleteBook() throws Exception {
         long id = 777;
-        mvc.perform(get("/delete").param("id", String.valueOf(id)))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlTemplate("/"));
+        mvc.perform(delete("/api/book/{id}", id))
+                .andExpect(status().isOk());
 
         verify(bookService, times(1)).deleteBy(id);
     }

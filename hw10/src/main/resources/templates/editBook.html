@@ -1,42 +1,150 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Редактирование книги</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма книги</title>
+    <style>
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        button {
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<form id="edit-form" action="edit.html" th:method="post" th:action="@{/edit(id=${book.id})}" th:object="${book}">
-    <h3>Книга:</h3>
+<h2 id="formTitle">Добавление новой книги</h2>
+
+<form id="bookForm">
+    <input type="hidden" id="bookId" name="bookId">
+
+    <label for="bookName">Название книги:</label>
+    <input type="text" id="bookName" name="bookName" required>
+
+    <label for="authorSelect">Выберите автора:</label>
+    <select id="authorSelect" name="author" required></select>
+
+    <label for="genreSelect">Выберите жанр:</label>
+    <select id="genreSelect" name="genre" required></select>
 
     <div>
-        <label for="book-name-input">Название:</label>
-        <input id="book-name-input" name="name" type="text" value="" th:value="*{name}"/>
-    </div>
-
-    <div>
-        <label for="book-genre-input">Жанр:</label>
-        <select th:field="${{book.genre}}">
-            <option id="book-genre-input" th:each="genre : ${genres}"
-                    th:value="${genre}" th:text="${genre.name}"></option>
-        </select>
-    </div>
-
-    <div>
-        <label for="book-author-input">Автор:</label>
-        <select th:field="${{book.author}}">
-            <option id="book-author-input" th:each="author : ${authors}"
-                    th:value="${author}" th:text="${author.fullName}"></option>
-        </select>
-    </div>
-
-    <div>
-        <button type="submit">Сохранить</button>
-        <a href="list.html" th:href="@{/}">
-            <button type="button">Отмена</button>
-        </a>
+        <button type="button" onclick="saveBook()">Сохранить</button>
+        <button type="button" onclick="cancel()">Отмена</button>
     </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('id');
+
+        if (bookId) {
+            document.getElementById('formTitle').textContent = 'Редактирование книги';
+            loadBookForEditing(bookId);
+        } else {
+            loadAuthorsAndGenres().then(() => {
+                // После загрузки авторов и жанров можно продолжить
+                // например, устанавливать значения для других элементов формы или выполнять другие действия
+            });
+        }
+    });
+
+    async function loadAuthorsAndGenres() {
+        try {
+            const [authorsResponse, genresResponse] = await Promise.all([
+                fetch('/api/author'),
+                fetch('/api/genre')
+            ]);
+
+            const [authors, genres] = await Promise.all([
+                authorsResponse.json(),
+                genresResponse.json()
+            ]);
+
+            const authorSelect = document.getElementById('authorSelect');
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author.id;
+                option.textContent = author.fullName;
+                authorSelect.appendChild(option);
+            });
+
+            const genreSelect = document.getElementById('genreSelect');
+            genres.forEach(genre => {
+                const option = document.createElement('option');
+                option.value = genre.id;
+                option.textContent = genre.name;
+                genreSelect.appendChild(option);
+            });
+
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        }
+    }
+
+    async function loadBookForEditing(bookId) {
+        try {
+            await loadAuthorsAndGenres(); // Загружаем списки авторов и жанров
+
+            const bookResponse = await fetch(`/api/book/${bookId}`);
+            const book = await bookResponse.json();
+
+            // Заполняем форму текущими значениями
+            document.getElementById('bookId').value = book.id;
+            document.getElementById('bookName').value = book.name;
+
+            // Устанавливаем выбранные значения для выпадающих списков авторов и жанров
+            document.getElementById('authorSelect').value = book.author.id.toString();
+            document.getElementById('genreSelect').value = book.genre.id.toString();
+
+        } catch (error) {
+            console.error('Ошибка при загрузке данных книги для редактирования:', error);
+        }
+    }
+
+    function saveBook() {
+        const bookId = document.getElementById('bookId').value;
+        const bookName = document.getElementById('bookName').value;
+        const authorId = document.getElementById('authorSelect').value;
+        const genreId = document.getElementById('genreSelect').value;
+
+        const bookDto = {
+            id: bookId,
+            name: bookName,
+            author: { id: authorId },
+            genre: { id: genreId }
+        };
+
+        fetch('/api/book', {
+            method: bookId ? 'PUT' : 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bookDto)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(bookId ? 'Книга успешно отредактирована.' : 'Книга успешно добавлена.');
+                window.location.href = '/';
+            } else {
+                console.error('Ошибка при сохранении книги:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при сохранении книги:', error);
+        });
+    }
+
+    function cancel() {
+        window.location.href = '/';
+    }
+</script>
+
 
 </body>
 </html>
