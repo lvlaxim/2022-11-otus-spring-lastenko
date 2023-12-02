@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>ru.lastenko</groupId>
-    <artifactId>library</artifactId>
+    <artifactId>library-mvc-ajax</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>library(MVC)</name>
     <description>Demo project for Spring Boot</description>

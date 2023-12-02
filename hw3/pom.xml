@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.lastenko</groupId>
-    <artifactId>student-test</artifactId>
+    <artifactId>student-test-spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>hw3</name>
     <description>hw3</description>

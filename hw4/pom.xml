@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.lastenko</groupId>
-    <artifactId>student-test</artifactId>
+    <artifactId>student-test-spring-shell</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>hw4</name>
     <description>hw4</description>
