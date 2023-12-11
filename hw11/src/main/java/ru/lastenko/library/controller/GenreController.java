@@ -10,7 +10,7 @@ import ru.lastenko.library.repository.GenreRepository;
 
 @RestController
 @RequiredArgsConstructor
-public class GenreConroller {
+public class GenreController {
 
     private final GenreRepository genreRepository;
 

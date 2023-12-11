@@ -43,7 +43,7 @@ public class BookController {
     }
 
     @PutMapping("/api/book")
-    public Mono<BookDto> editBook(@RequestBody BookDto bookDto) {
+    public Mono<BookDto> updateBook(@RequestBody BookDto bookDto) {
         Book book = bookMapper.mapFromDto(bookDto);
         return bookRepository.save(book)
                 .map(bookMapper::mapToDto);
