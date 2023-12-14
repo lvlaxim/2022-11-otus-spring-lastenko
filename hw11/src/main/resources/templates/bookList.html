@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список книг</title>
+
+    <style>
+        body {
+            padding-bottom: 50px;
+        }
+
+        button {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .actions-column {
+            width: 150px; /* Укажем фиксированную ширину колонки "Действия" */
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Список книг</h2>
+
+<button onclick="redirectToEditPage()">Добавить книгу</button>
+
+<table id="bookTable">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Жанр</th>
+        <th class="actions-column">Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Тело таблицы будет заполнено с помощью JavaScript -->
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        updateTable();
+    });
+
+    function updateTable() {
+        // Получаем данные из REST-контроллера
+        fetch('/api/book')
+            .then(response => response.json())
+            .then(data => {
+                // Заполняем таблицу объектами BookDto
+                populateTable(data);
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+            });
+    }
+
+    function populateTable(books) {
+        const tableBody = document.querySelector('#bookTable tbody');
+
+        // Очищаем текущее тело таблицы
+        while (tableBody.firstChild) {
+            tableBody.removeChild(tableBody.firstChild);
+        }
+
+        books.forEach(book => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = book.name;
+            row.insertCell(1).textContent = book.author.fullName;
+            row.insertCell(2).textContent = book.genre.name;
+
+            // Добавляем ячейку для действий
+            const actionsCell = row.insertCell(3);
+            actionsCell.classList.add('actions-cell');
+
+            // Кнопка "Редактировать"
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Редактировать';
+            editButton.addEventListener('click', () => redirectToEditPageWithId(book.id));
+            actionsCell.appendChild(editButton);
+
+            // Кнопка "Удалить"
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Удалить';
+            deleteButton.addEventListener('click', () => deleteBook(book.id));
+            actionsCell.appendChild(deleteButton);
+        });
+    }
+
+    function deleteBook(bookId) {
+        // Отправляем запрос на удаление книги по ее ID
+        fetch(`/api/book/${bookId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Обновляем таблицу после успешного удаления
+                    updateTable();
+                } else {
+                    console.error('Ошибка при удалении книги:', response.status);
+                    throw new Error('Ошибка при удалении книги');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function redirectToEditPage() {
+        window.location.href = '/edit';
+    }
+
+    function redirectToEditPageWithId(bookId) {
+        window.location.href = `/edit?id=${bookId}`;
+    }
+
+</script>
+
+</body>
+</html>
