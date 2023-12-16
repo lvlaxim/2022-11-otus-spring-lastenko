@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
     @RequiredArgsConstructor
     private class UserDetailsMapper {
 
-        UserDetails map(User user) {
+        private UserDetails map(User user) {
             return new UserDetails() {
                 @Override
                 public Collection<? extends GrantedAuthority> getAuthorities() {
