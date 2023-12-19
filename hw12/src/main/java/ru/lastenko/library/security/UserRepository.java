@@ -2,7 +2,10 @@ package ru.lastenko.library.security;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
 
-    User findByUsername(String userName);
+public interface UserRepository extends JpaRepository<AppUser, Long> {
+
+    Optional<AppUser> findByUsername(String userName);
+
 }
