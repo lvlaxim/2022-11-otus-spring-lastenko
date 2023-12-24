@@ -45,7 +45,7 @@ class BookControllerSecurityTest {
     private GenreService genreService;
 
     @MockBean
-    private UserService userService;
+    private AppUserService appUserService;
 
     @Autowired
     private MockMvc mvc;
