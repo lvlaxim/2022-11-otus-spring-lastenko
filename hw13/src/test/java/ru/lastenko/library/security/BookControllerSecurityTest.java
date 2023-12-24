@@ -57,6 +57,10 @@ class BookControllerSecurityTest {
 
     @ParameterizedTest
     @CsvSource({
+            "/,",
+            "/," + ROLE_USER,
+            "/," + ROLE_ADMIN,
+            "/," + ROLE_SOMEBODY,
             "/book,",
             "/book," + ROLE_USER,
             "/book," + ROLE_ADMIN,

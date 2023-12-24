@@ -27,7 +27,7 @@ public class BookController {
 
     private final GenreService genreService;
 
-    @GetMapping("/book")
+    @GetMapping({"/", "/book"})
     public String booksList(Model model) {
         List<BookDto> books = bookService.getAll();
         model.addAttribute("books", books);

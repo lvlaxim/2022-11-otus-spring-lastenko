@@ -25,9 +25,9 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/book").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/book").permitAll()
                         .requestMatchers(HttpMethod.GET, "/book/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/book/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/book/**").hasAnyRole("ADMIN")
                         .anyRequest().denyAll()
                 )
                 .formLogin(withDefaults());

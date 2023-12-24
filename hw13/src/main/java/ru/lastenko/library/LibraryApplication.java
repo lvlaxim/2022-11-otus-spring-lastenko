@@ -11,6 +11,9 @@ public class LibraryApplication {
      *
      * username: user
      * password: password
+     *
+     * username: admin
+     * password: password
      */
 
     public static void main(String[] args) {
