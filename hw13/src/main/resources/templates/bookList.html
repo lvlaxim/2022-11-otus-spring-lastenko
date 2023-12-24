@@ -29,9 +29,32 @@
             border: none;
             border-radius: 3px;
         }
+
+        /* Стили для кнопки логаута */
+        .logout-container {
+            position: absolute;
+            right: 10px; /* Отступ справа */
+            top: 10px; /* Отступ сверху */
+        }
+
+        .logout-button {
+            padding: 5px 15px;
+            text-decoration: none;
+            background-color: #f44336; /* Красный цвет фона */
+            color: white; /* Белый текст */
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+<!-- Кнопка логаута -->
+<div class="logout-container">
+    <a href="/logout" class="logout-button">Выйти</a>
+</div>
+
 <a href="editBook.html" th:href="@{/book/new}">Добавить новую книгу</a>
 <h3>Книги:</h3>
 <table>
