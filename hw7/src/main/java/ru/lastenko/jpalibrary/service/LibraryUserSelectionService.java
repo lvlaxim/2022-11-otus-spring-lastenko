@@ -1,0 +1,73 @@
+package ru.lastenko.jpalibrary.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.lastenko.jpalibrary.model.Author;
+import ru.lastenko.jpalibrary.model.Book;
+import ru.lastenko.jpalibrary.model.Comment;
+import ru.lastenko.jpalibrary.model.Genre;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.ToLongFunction;
+
+@Component
+@RequiredArgsConstructor
+public class LibraryUserSelectionService {
+
+    private final IOService ioService;
+
+    private final BookService bookService;
+
+    private final AuthorService authorService;
+
+    private final GenreService genreService;
+
+    private final CommentService commentService;
+
+    public Book selectBookFromAll() {
+        ioService.outputString("Выберите книгу из списка:");
+        List<Book> books = bookService.getAll();
+        return letUserSelectById(books, Book::getId);
+    }
+
+    public Author selectAuthorFromAll() {
+        ioService.outputString("Выберите автора книги из списка:");
+        List<Author> authors = authorService.getAll();
+        return letUserSelectById(authors, Author::getId);
+    }
+
+    public Genre selectGenreFromAll() {
+        ioService.outputString("Выберите жанр книги из списка:");
+        List<Genre> genres = genreService.getAll();
+        return letUserSelectById(genres, Genre::getId);
+    }
+
+    public Comment selectBookComment() {
+        Book book = selectBookFromAll();
+        ioService.outputString("Выберите комментарий из списка:");
+        List<Comment> comments = commentService.getAllFor(book);
+        return letUserSelectById(comments, Comment::getId);
+    }
+
+    private <T> T letUserSelectById(Collection<T> models, ToLongFunction<T> idExtractor) {
+        ioService.output(models);
+        Optional<T> model = Optional.empty();
+        while (model.isEmpty()) {
+            ioService.outputString("введите id-номер из списка выше");
+            String idAsStr = ioService.readString();
+            Long id;
+            try {
+                id = Long.parseLong(idAsStr);
+            } catch (NumberFormatException e) {
+                ioService.outputString("некорректный id-номер");
+                continue;
+            }
+            model = models.stream()
+                    .filter(m -> id.equals(idExtractor.applyAsLong(m)))
+                    .findFirst();
+        }
+        return model.get();
+    }
+}
