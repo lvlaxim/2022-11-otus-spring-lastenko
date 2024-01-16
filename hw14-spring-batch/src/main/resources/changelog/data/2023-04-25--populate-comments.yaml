@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-02-12--populate-authors-table
+      author: lvlaxim
+      context: dev
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-04-25--comments.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: comments

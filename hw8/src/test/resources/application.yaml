@@ -26,7 +26,7 @@ mongock:
   runner-type: "ApplicationRunner" # default
   #runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.lastenko.library.changelog
+    - ru.lastenko.mongolibrary.changelog
   mongo-db:
     write-concern:
       journal: false
