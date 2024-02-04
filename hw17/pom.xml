@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>ru.lastenko</groupId>
-    <artifactId>library-mvc-security-authorization</artifactId>
+    <artifactId>library-mvc-metrics</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>library(MVC)</name>
+    <name>library(metrics)</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -74,6 +74,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>

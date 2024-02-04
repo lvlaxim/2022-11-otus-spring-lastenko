@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/", "/book").permitAll()
                         .requestMatchers(HttpMethod.GET, "/book/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/book/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/actuator/**").hasAnyRole("ADMIN")
                         .anyRequest().denyAll()
                 )
                 .formLogin(withDefaults());

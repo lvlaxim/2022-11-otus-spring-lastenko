@@ -6,3 +6,16 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+  jmx:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
