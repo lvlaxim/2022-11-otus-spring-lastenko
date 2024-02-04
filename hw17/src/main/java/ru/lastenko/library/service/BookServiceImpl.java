@@ -48,4 +48,11 @@ public class BookServiceImpl implements BookService {
     public void deleteBy(long id) {
         bookRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isLibraryEmpty() {
+        return bookRepository.count() == 0;
+    }
+
 }

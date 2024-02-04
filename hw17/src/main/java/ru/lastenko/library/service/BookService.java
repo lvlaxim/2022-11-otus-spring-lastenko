@@ -13,4 +13,7 @@ public interface BookService {
     BookDto getBy(long id);
 
     void deleteBy(long id);
+
+    boolean isLibraryEmpty();
+
 }
