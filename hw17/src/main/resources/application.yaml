@@ -19,3 +19,6 @@ management:
   health:
     defaults:
       enabled: true
+logging:
+  file:
+    name: "logs/library.log"
