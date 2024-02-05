@@ -6,6 +6,9 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+  data:
+    rest:
+      base-path: /datarest
   jmx:
     enabled: true
 management:
