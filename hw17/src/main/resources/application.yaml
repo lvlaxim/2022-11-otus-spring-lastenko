@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:librarydb
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  data:
+    rest:
+      base-path: /datarest
+  jmx:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+logging:
+  file:
+    name: logs/library.log
