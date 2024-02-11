@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-12-23--populate-roles-table
+      author: lvlaxim
+      context: dev
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2023-12-23--roles.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: roles
+  - changeSet:
+      id: 2023-12-23--populate-user_role-table
+      author: lvlaxim
+      context: dev
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: "user_id,role_id"
+        file: data/2023-12-23--user_role.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: user_role
