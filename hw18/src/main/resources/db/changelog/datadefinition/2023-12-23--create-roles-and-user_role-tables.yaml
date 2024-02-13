@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2023-12-23--create-roles-table
+      author: lvlaxim
+      createTable:
+        tableName: roles
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              startWith: 100
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_role
+          - column:
+              name: role_name
+              type: varchar(50)
+              constraints:
+                nullable: false
+  - changeSet:
+      id: 2023-12-23--create-user_role-table
+      author: lvlaxim
+      createTable:
+        tableName: user_role
+        columns:
+          - column:
+              name: user_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                nullable: false
+                primaryKeyName: pk_user_role
+                foreignKeyName: fk_user_role
+                references: users(id)
+                deleteCascade: true
+          - column:
+              name: role_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                nullable: false
+                primaryKeyName: pk_user_role
+                foreignKeyName: fk_role_user
+                references: roles(id)
+                deleteCascade: true
