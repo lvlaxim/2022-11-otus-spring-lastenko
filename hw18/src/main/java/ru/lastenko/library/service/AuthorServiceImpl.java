@@ -1,5 +1,6 @@
 package ru.lastenko.library.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,15 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional(readOnly = true)
+    @CircuitBreaker(name = "database", fallbackMethod = "fallbackForGetAll")
     public List<AuthorDto> getAll() {
         return authorRepository.findAll()
                 .stream()
                 .map(authorMapper::mapToDto)
                 .toList();
+    }
+
+    private List<AuthorDto> fallbackForGetAll(Exception e) {
+        return List.of();
     }
 }

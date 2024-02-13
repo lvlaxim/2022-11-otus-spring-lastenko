@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -24,15 +25,23 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/", "/book").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/book/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/book/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/actuator/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/datarest/**").hasAnyRole("ADMIN")
-                        .anyRequest().denyAll()
-                )
-                .formLogin(withDefaults());
+                .authorizeRequests(authorize -> authorize
+                        .requestMatchers(new AntPathRequestMatcher("/", HttpMethod.GET.name())).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/book", HttpMethod.GET.name())).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/book/**", HttpMethod.GET.name())).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/book/**", HttpMethod.POST.name())).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/actuator/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/datarest/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                        .anyRequest().denyAll())
+                .formLogin(withDefaults())
+                // Настройки для H2 консоли
+                .headers(headers -> headers
+                        // Отключаем X-Frame-Options или устанавливаем его в SAMEORIGIN
+                        .frameOptions().sameOrigin()
+                        // Устанавливаем Content Security Policy
+                        .contentSecurityPolicy("frame-ancestors 'self';")
+                );
         return http.build();
     }
 

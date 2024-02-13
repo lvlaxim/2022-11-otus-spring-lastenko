@@ -1,5 +1,6 @@
 package ru.lastenko.library.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
+    @CircuitBreaker(name = "database", fallbackMethod = "fallbackForGetAll")
     public List<BookDto> getAll() {
         return bookRepository.findAll()
                 .stream()
@@ -29,6 +31,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
+    @CircuitBreaker(name = "database", fallbackMethod = "fallbackForSave")
     public BookDto save(BookDto bookDto) {
         Book book = bookMapper.mapFromDto(bookDto);
         Book savedBook = bookRepository.save(book);
@@ -37,6 +40,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
+    @CircuitBreaker(name = "database", fallbackMethod = "fallbackForGetBy")
     public BookDto getBy(long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow();
@@ -45,14 +49,32 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
+    @CircuitBreaker(name = "database")
     public void deleteBy(long id) {
         bookRepository.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
+    @CircuitBreaker(name = "database")
     public boolean isLibraryEmpty() {
         return bookRepository.count() == 0;
+    }
+
+    private List<BookDto> fallbackForGetAll(Exception e) {
+        return List.of();
+    }
+
+    private BookDto fallbackForSave(BookDto bookDto, Exception e) {
+        BookDto emptyBookDto = new BookDto();
+        emptyBookDto.setId(bookDto.getId());
+        return emptyBookDto;
+    }
+
+    private BookDto fallbackForGetBy(long id, Exception e) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(id);
+        return bookDto;
     }
 
 }
