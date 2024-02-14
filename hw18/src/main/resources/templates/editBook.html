@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование книги</title>
+</head>
+<body>
+
+<form id="edit-form" action="edit.html" th:method="post" th:action="@{/book}" th:object="${book}">
+    <h3>Книга:</h3>
+
+    <!-- Скрытое поле для id -->
+    <input type="hidden" name="id" th:value="*{id}"/>
+
+    <div>
+        <label for="book-name-input">Название:</label>
+        <input id="book-name-input" name="name" type="text" value="" th:value="*{name}"/>
+    </div>
+
+    <div>
+        <label for="book-genre-input">Жанр:</label>
+        <select th:field="${{book.genre}}">
+            <option id="book-genre-input" th:each="genre : ${genres}"
+                    th:value="${genre}" th:text="${genre.name}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="book-author-input">Автор:</label>
+        <select th:field="${{book.author}}">
+            <option id="book-author-input" th:each="author : ${authors}"
+                    th:value="${author}" th:text="${author.fullName}"></option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Сохранить</button>
+        <a href="list.html" th:href="@{/book}">
+            <button type="button">Отмена</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>
